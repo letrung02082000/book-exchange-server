@@ -1,0 +1,30 @@
+post /api/user/login
+body: email (contain @) or id (id is id of user)
+    password >6 characters
+    return type:"Valid" or "Invalid"
+    if ("Valid"), status is Fail or Success
+    if Success : data is info of user
+
+post /api/user/signup
+    body: email (contain @)
+    password >6 characters
+    return type:"Valid" or "Invalid"
+        if ("Valid"), status is Fail or Success
+        if Success : data is info of user
+
+
+require (id and token) of user in header of request if not return type:"RequireLogin"
+post /api/book/push
+
+    name: { type: String, required: true },
+    contact: { type: String, required: true },
+
+    price: { type: String, default: "0đ" },
+    type: { type: String, default: "donation" }, //donation or sell
+    imageurl: { type: String, default: null },
+    description: { type: String, default: "" },
+
+    return type:"Valid" or "Invalid"
+    if ("Valid") data is info of book
+    
+get /api/book/get
