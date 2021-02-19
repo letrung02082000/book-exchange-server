@@ -28,6 +28,6 @@ module.exports = {
     },
 
     loadBookBySku(bookSku) {
-        return BookModel.findOne({ sku: bookSku }).lean();
+        return BookModel.find({ sku: bookSku }).lean();
     },
 };

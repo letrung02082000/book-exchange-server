@@ -24,6 +24,7 @@ module.exports = {
 
     async getBookBySku(req, res) {
         const bookSku = req.params.bookSku;
+        console.log(bookSku);
         const book = await bookModel.loadBookBySku(bookSku);
 
         if (book.length > 0) {
