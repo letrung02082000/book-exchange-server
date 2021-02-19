@@ -4,6 +4,6 @@ const bookController = require('../app/controllers/book.controller.js');
 //const userAuthentication = require('../app/middleware/userauthentication.middleware');
 // router.post('/push', bookController.push);
 router.get('/getAll', bookController.getAllBooks);
-router.get('/:id', bookController.getBook);
-
+router.get('/sku/:bookSku', bookController.getBookBySku);
+router.get('/:id', bookController.getBookById);
 module.exports = router;

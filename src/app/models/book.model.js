@@ -26,4 +26,8 @@ module.exports = {
             _id: mongoose.Types.ObjectId(bookId),
         }).lean();
     },
+
+    loadBookBySku(bookSku) {
+        return BookModel.findOne({ sku: bookSku }).lean();
+    },
 };
