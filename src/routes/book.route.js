@@ -5,5 +5,7 @@ const bookController = require('../app/controllers/book.controller.js');
 // router.post('/push', bookController.push);
 router.get('/getAll', bookController.getAllBooks);
 router.get('/sku/:bookSku', bookController.getBookBySku);
+router.get('/query', bookController.getBooksPerPage);
 router.get('/:id', bookController.getBookById);
+
 module.exports = router;

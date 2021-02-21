@@ -30,4 +30,11 @@ module.exports = {
     loadBookBySku(bookSku) {
         return BookModel.find({ sku: bookSku }).lean();
     },
+
+    loadBookPerPage(page, limit) {
+        return BookModel.find()
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .lean();
+    },
 };

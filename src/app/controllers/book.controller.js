@@ -11,6 +11,23 @@ module.exports = {
         }
     },
 
+    async getBooksPerPage(req, res) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        try {
+            const books = await bookModel.loadBookPerPage(page, limit);
+
+            if (books.length > 0) {
+                res.json({ type: 'Valid', data: books });
+            } else {
+                res.json({ type: 'Invalid' });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     async getBookById(req, res) {
         const bookId = req.params.id;
         const book = await bookModel.loadBookById(bookId);
