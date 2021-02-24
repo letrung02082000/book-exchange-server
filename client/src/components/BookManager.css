@@ -1,0 +1,29 @@
+.btn-new-book {
+    align-items: center;
+}
+.table {
+    overflow: auto;
+    display: block;
+    table-layout: auto;
+}
+.btn-page {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+.btn-page li {
+    cursor: pointer;
+    text-align: center;
+    padding: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
+}
+.btn-page li p {
+    margin: auto;
+    background-color: aliceblue;
+
+    color: rgb(0, 0, 0);
+}
