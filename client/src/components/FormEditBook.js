@@ -47,6 +47,7 @@ export default (props) => {
                         err.map((e) => <p style={{ color: "#ff0000" }}>{e}</p>)}
                 </Modal.Body>
             </Modal>
+
             <Form.Group controlId="formBasicSku">
                 <Form.Label>Mã vạch</Form.Label>
                 <Form.Control
@@ -65,16 +66,28 @@ export default (props) => {
                     placeholder="Nhập tên sách"
                 />
             </Form.Group>
-            <Form.Group controlId="formBasicPrice">
-                <Form.Label>Giá (đ)</Form.Label>
-                <Form.Control
-                    required
-                    defaultValue={props.children.price || 0}
-                    type="number"
-                    placeholder="Nhập giá"
-                    step={1000}
-                />
-            </Form.Group>
+            <div
+                style={{ display: "flex", flexDirection: "row", width: "100%" }}
+            >
+                <Form.Group controlId="formBasicPrice">
+                    <Form.Label>Giá (đ)</Form.Label>
+                    <Form.Control
+                        required
+                        defaultValue={props.children.price || 0}
+                        type="number"
+                        placeholder="Nhập giá"
+                        step={1000}
+                    />
+                </Form.Group>
+                <Form.Group controlId="formBasicQuantity">
+                    <Form.Label>Số lượng </Form.Label>
+                    <Form.Control
+                        defaultValue={props.children.quantity}
+                        type="number"
+                        placeholder="Nhập số lượng"
+                    />
+                </Form.Group>
+            </div>
             <Form.Group controlId="formBasicUrlImage">
                 <Form.Label>Đường dẫn hình ảnh (đ)</Form.Label>
                 <Form.Control
@@ -87,17 +100,11 @@ export default (props) => {
             <Form.Group controlId="formBasicDescription">
                 <Form.Label>Mô tả</Form.Label>
                 <Form.Control
+                    as="textarea"
+                    rows={10}
                     defaultValue={props.children.description}
                     type="text"
                     placeholder="Mô tả"
-                />
-            </Form.Group>
-            <Form.Group controlId="formBasicQuantity">
-                <Form.Label>Số lượng (đ)</Form.Label>
-                <Form.Control
-                    defaultValue={props.children.quantity}
-                    type="number"
-                    placeholder="Nhập số lượng"
                 />
             </Form.Group>
 
@@ -186,7 +193,7 @@ export default (props) => {
                 variant="primary"
                 type="submit"
             >
-                Thêm sách
+                {!props.children._id ? "Thêm" : "Cập nhật"} sách
             </Button>
             <Button variant="secondary" onClick={() => props.handleClose()}>
                 Thoát

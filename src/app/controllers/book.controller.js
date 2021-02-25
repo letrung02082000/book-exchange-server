@@ -45,7 +45,7 @@ module.exports = {
             return res.json({ type: "Invalid" });
         }
         let result = await bookModel.removeBookById(req.body._id);
-        console.log(result);
+        return res.json({ type: "Valid", data: result });
     },
     async updateBookById(req, res) {
         console.log(req.body);

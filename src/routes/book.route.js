@@ -10,4 +10,5 @@ router.get("/query", bookController.getBooksPerPage);
 router.get("/:id", bookController.getBookById);
 
 router.post("/push", adminAuth, bookController.updateBookById);
+router.post("/delete", adminAuth, bookController.removeBookById);
 module.exports = router;

@@ -4,7 +4,7 @@ const bookSchema = new mongoose.Schema({
     quantity: { type: Number, require: true },
     name: { type: String, required: true },
     price: { type: Number, default: 0 },
-    type: { type: String }, //selling or sold
+    type: { type: String, default: "show" }, //hidden or show
     imageurl: { type: String, default: null },
     description: { type: String, default: "" },
     pushtime: { type: Date, required: true },
@@ -39,7 +39,7 @@ module.exports = {
             .lean();
     },
     removeBookById(_id) {
-        return BookModel.findOneAndDelete(_id).lean();
+        return BookModel.findByIdAndDelete(_id).lean();
     },
     async updateBookById(_id, newBook) {
         let newBookModel;

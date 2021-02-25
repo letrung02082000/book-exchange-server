@@ -33,8 +33,12 @@ app.set("views", path.join(__dirname, "resources", "views"));
 
 app.use("/api", apiRouter);
 //routes
-app.use("/", routes);
-
+// app.use("*");
+// app.use("/", routes);
+app.use(express.static("client/build"));
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 app.listen(process.env.PORT || port, () =>
     console.log(`App is listening on port ${port}`)
 );

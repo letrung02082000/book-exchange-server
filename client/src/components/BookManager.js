@@ -29,7 +29,27 @@ export default (props) => {
         tmp.unshift(book);
         setData(tmp);
     };
-    console.log(data);
+    const pushIdTodelete = (_id) => {
+        axios
+            .post("/api/book/delete", { _id: _id })
+            .then((res) => res.data)
+            .then((res) => {
+                if (res.type == "Valid") {
+                    console.log(res);
+                    setDialog(null);
+                    let tmp = [...data];
+
+                    for (let i = 0; i < tmp.length; i++) {
+                        if (tmp[i]._id == _id) {
+                            tmp.splice(i, 1);
+                            setData(tmp);
+                            return;
+                        }
+                    }
+                }
+            });
+    };
+    const [dialog, setDialog] = useState(null);
     function setShowInserting(_id = null) {}
     const [showedBook, setShowedBook] = useState(null);
     return (
@@ -56,6 +76,32 @@ export default (props) => {
                     )}
                 </Modal.Body>
             </Modal>
+            <Modal
+                show={!!dialog}
+                onHide={() => setDialog(null)}
+                backdrop="static"
+                // keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>{dialog && dialog.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{dialog && dialog.message}</Modal.Body>
+                <Modal.Footer>
+                    {dialog &&
+                        dialog.button &&
+                        dialog.button.map((e) => (
+                            <Button
+                                key={e.title}
+                                onClick={() => {
+                                    e.action();
+                                }}
+                                variant={e.style}
+                            >
+                                {e.title}
+                            </Button>
+                        ))}
+                </Modal.Footer>
+            </Modal>
             <div>
                 <h2>Quản lí sách</h2>
                 <Button
@@ -77,28 +123,84 @@ export default (props) => {
                     <tr>
                         <th>#</th>
                         <th>Sku</th>
-                        <th>Name</th>
-
-                        <th>Price</th>
-                        <th>Description</th>
+                        <th>Tên</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Mô tả</th>
+                        <th>Khác</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.length != 0 ? (
                         data.map((e, index) => (
-                            <tr
-                                style={{ cursor: "pointer" }}
-                                onClick={() => setShowedBook(e)}
-                                key={e._id}
-                            >
+                            <tr style={{ cursor: "pointer" }} key={e._id}>
                                 <td>{index + 1}</td>
                                 <td>{e.sku}</td>
                                 <td>{e.name}</td>
                                 <td>{e.price}</td>
+                                <td>{e.quantity}</td>
                                 <td>
                                     {e.description
-                                        ? e.description.substr(0, 20)
+                                        ? e.description.substr(0, 40) + "..."
                                         : ""}
+                                </td>
+                                <td onClick={() => setShowedBook(e)}>
+                                    {e.others &&
+                                        e.others.slice(0, 3).map((e) => (
+                                            <p
+                                                style={{
+                                                    fontSize: 14,
+                                                    margin: 0
+                                                }}
+                                            >
+                                                {e.key + ": " + e.value}
+                                            </p>
+                                        ))}
+                                    {e.others && e.others.length > 3 && (
+                                        <p>...</p>
+                                    )}
+                                </td>
+                                <td>
+                                    <Button
+                                        onClick={() => setShowedBook(e)}
+                                        variant="secondary"
+                                    >
+                                        Sửa
+                                    </Button>
+
+                                    <Button
+                                        style={{ zIndex: 1 }}
+                                        onClick={() => {
+                                            setDialog({
+                                                title: "Xóa",
+                                                message:
+                                                    "Bạn có chắc muốn xóa sách " +
+                                                    e.name,
+                                                button: [
+                                                    {
+                                                        title: "Hủy",
+                                                        action: () =>
+                                                            setDialog(null)
+                                                    },
+                                                    {
+                                                        title: "Xóa",
+                                                        style: "danger",
+                                                        action: () => {
+                                                            console.log(e);
+                                                            pushIdTodelete(
+                                                                e._id
+                                                            );
+                                                        }
+                                                    }
+                                                ]
+                                            });
+                                        }}
+                                        style={{ marginLeft: 10 }}
+                                        variant="danger"
+                                    >
+                                        Xóa
+                                    </Button>
                                 </td>
                             </tr>
                         ))

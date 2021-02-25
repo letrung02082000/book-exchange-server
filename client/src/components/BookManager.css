@@ -16,14 +16,13 @@
 .btn-page li {
     cursor: pointer;
     text-align: center;
-    padding: auto;
+
     width: 40px;
     height: 40px;
     border-radius: 30px;
 }
 .btn-page li p {
-    margin: auto;
-    background-color: aliceblue;
+    margin-top: 7px;
 
     color: rgb(0, 0, 0);
 }
