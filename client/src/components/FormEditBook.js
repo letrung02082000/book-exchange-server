@@ -10,7 +10,8 @@ export default (props) => {
         let bookInf = {
             sku: document.getElementById("formBasicSku").value,
             name: document.getElementById("formBasicBookname").value,
-            price: document.getElementById("formBasicPrice").value || 0,
+            oldprice: document.getElementById("formBasicOldPrice").value || 0,
+            newprice: document.getElementById("formBasicNewPrice").value || 0,
             imageurl: document.getElementById("formBasicUrlImage").value,
             description: document.getElementById("formBasicDescription").value,
             quantity: document.getElementById("formBasicQuantity").value || 0,
@@ -39,7 +40,7 @@ export default (props) => {
     }
     const [err, setError] = useState(null);
     return (
-        <Form onSubmit={handlePushBook}>
+        <Form style={{ width: "100%" }} onSubmit={handlePushBook}>
             <Modal onHide={() => setError(null)} show={!!err}>
                 <Modal.Header closeButton>Lỗi</Modal.Header>
                 <Modal.Body>
@@ -69,11 +70,21 @@ export default (props) => {
             <div
                 style={{ display: "flex", flexDirection: "row", width: "100%" }}
             >
-                <Form.Group controlId="formBasicPrice">
-                    <Form.Label>Giá (đ)</Form.Label>
+                <Form.Group controlId="formBasicOldPrice">
+                    <Form.Label>Giá cũ (đ)</Form.Label>
                     <Form.Control
                         required
-                        defaultValue={props.children.price || 0}
+                        defaultValue={props.children.oldprice || 0}
+                        type="number"
+                        placeholder="Nhập giá"
+                        step={1000}
+                    />
+                </Form.Group>
+                <Form.Group controlId="formBasicNewPrice">
+                    <Form.Label>Giá mới(đ)</Form.Label>
+                    <Form.Control
+                        required
+                        defaultValue={props.children.newprice || 0}
                         type="number"
                         placeholder="Nhập giá"
                         step={1000}
@@ -116,6 +127,7 @@ export default (props) => {
                         <th>Thông tin</th>
 
                         <th>Mô tả</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,22 +155,23 @@ export default (props) => {
                                         }}
                                     />
                                 </td>
+                                <td>
+                                    <Button
+                                        variant="danger"
+                                        onClick={(index) => {
+                                            let tmp = [...others];
+                                            tmp.splice(index, 1);
+
+                                            setOthers(tmp);
+                                        }}
+                                    >
+                                        Xóa
+                                    </Button>
+                                </td>
                             </tr>
                         ))}
                     <tr>
-                        <td>
-                            <Button
-                                onClick={() => {
-                                    let tmp = [...others];
-                                    tmp.push(newOther);
-                                    setNewOther({ key: "", value: "" });
-
-                                    setOthers(tmp);
-                                }}
-                            >
-                                Thêm
-                            </Button>
-                        </td>
+                        <td>{others && others.length}</td>
                         <td>
                             <input
                                 placeholder="Ví dụ: năm xuất bản"
@@ -182,6 +195,19 @@ export default (props) => {
                                     });
                                 }}
                             />
+                        </td>
+                        <td>
+                            <Button
+                                onClick={() => {
+                                    let tmp = [...others];
+                                    tmp.push(newOther);
+                                    setNewOther({ key: "", value: "" });
+
+                                    setOthers(tmp);
+                                }}
+                            >
+                                Thêm
+                            </Button>
                         </td>
                     </tr>
                 </tbody>

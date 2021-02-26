@@ -3,7 +3,8 @@ const bookSchema = new mongoose.Schema({
     sku: { type: String, required: true },
     quantity: { type: Number, require: true },
     name: { type: String, required: true },
-    price: { type: Number, default: 0 },
+    newprice: { type: Number, default: 0 },
+    oldprice: { type: Number, default: 0 },
     type: { type: String, default: "show" }, //hidden or show
     imageurl: { type: String, default: null },
     description: { type: String, default: "" },

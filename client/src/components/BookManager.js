@@ -124,7 +124,8 @@ export default (props) => {
                         <th>#</th>
                         <th>Sku</th>
                         <th>Tên</th>
-                        <th>Giá</th>
+                        <th>Giá cũ</th>
+                        <th>Giá mới</th>
                         <th>Số lượng</th>
                         <th>Mô tả</th>
                         <th>Khác</th>
@@ -138,7 +139,8 @@ export default (props) => {
                                 <td>{index + 1}</td>
                                 <td>{e.sku}</td>
                                 <td>{e.name}</td>
-                                <td>{e.price}</td>
+                                <td>{e.oldprice}</td>
+                                <td>{e.newprice}</td>
                                 <td>{e.quantity}</td>
                                 <td>
                                     {e.description
