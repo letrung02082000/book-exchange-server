@@ -66,7 +66,11 @@ module.exports = {
         return { err: err };
     },
 
-    loadBestSeller() {
-        return BookModel.find().sort({ buyCount: -1 }).limit(10);
+    loadBestSeller(page, limit) {
+        return BookModel.find()
+            .sort({ buyCount: -1 })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .lean();
     },
 };

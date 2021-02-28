@@ -72,7 +72,10 @@ module.exports = {
     },
 
     async getBestSeller(req, res) {
-        const book = await bookModel.loadBestSeller();
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const book = await bookModel.loadBestSeller(page, limit);
 
         if (book.length > 0) {
             res.json({
