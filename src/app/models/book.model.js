@@ -1,21 +1,23 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({
     sku: { type: String, required: true },
     quantity: { type: Number, require: true },
     name: { type: String, required: true },
     newprice: { type: Number, default: 0 },
     oldprice: { type: Number, default: 0 },
-    type: { type: String, default: "show" }, //hidden or show
+    type: { type: String, default: 'show' }, //hidden or show
     imageurl: { type: String, default: null },
-    description: { type: String, default: "" },
+    description: { type: String, default: '' },
     pushtime: { type: Date, required: true },
     others: { type: Array, default: [] },
 
     author: { type: mongoose.Types.ObjectId },
-    category: { type: mongoose.Types.ObjectId }
+    category: { type: mongoose.Types.ObjectId },
+
+    buyCount: { type: Number, default: 0 },
 });
 
-const BookModel = mongoose.model("book", bookSchema);
+const BookModel = mongoose.model('book', bookSchema);
 
 module.exports = {
     loadAllBooks() {
@@ -24,7 +26,7 @@ module.exports = {
 
     loadBookById(bookId) {
         return BookModel.findById({
-            _id: mongoose.Types.ObjectId(bookId)
+            _id: mongoose.Types.ObjectId(bookId),
         }).lean();
     },
 
@@ -46,7 +48,7 @@ module.exports = {
         let newBookModel;
 
         if (!_id) {
-            newBook["pushtime"] = new Date();
+            newBook['pushtime'] = new Date();
             newBookModel = new BookModel(newBook);
         } else {
             newBookModel = await BookModel.findById(_id);
@@ -62,5 +64,9 @@ module.exports = {
         for (let key in error.errors)
             err.push(error.errors[key].properties.message);
         return { err: err };
-    }
+    },
+
+    loadBestSeller() {
+        return BookModel.find().sort({ buyCount: -1 }).limit(10);
+    },
 };
