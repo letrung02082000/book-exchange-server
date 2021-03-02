@@ -33,7 +33,9 @@ module.exports = {
         const bookId = req.params.id;
         const book = await bookModel.loadBookById(bookId);
 
-        if (book.length > 0) {
+        console.log(book);
+
+        if (book) {
             res.json({ type: 'Valid', data: book });
         } else {
             res.json({ type: 'Invalid' });
