@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const bookSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const bookSchema = new Schema({
     sku: { type: String, required: true },
     quantity: { type: Number, require: true },
     name: { type: String, required: true },
@@ -11,8 +13,8 @@ const bookSchema = new mongoose.Schema({
     pushtime: { type: Date, required: true },
     others: { type: Array, default: [] },
 
-    author: { type: mongoose.Types.ObjectId },
-    category: { type: mongoose.Types.ObjectId },
+    //author: { type: Schema.Types.ObjectId },
+    category: { type: Schema.Types.ObjectId, ref: 'category' },
 
     buyCount: { type: Number, default: 0 },
 });
