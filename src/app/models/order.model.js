@@ -16,6 +16,10 @@ const orderSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'user', default: null },
     pending: { type: Boolean, default: true },
     orderDate: { type: Date, default: Date.now },
+    tel: { type: String, required: true },
+    address: { type: String, default: null },
+    shipping: { type: Boolean, default: true }, // true: giao hàng tận nơi, false: nhận sách tại tủ sách
+    payment: { type: Boolean, default: true }, //true: thanh toán khi nhận sách, false: thanh toán qua momo
 });
 
 const OrderModel = mongoose.model('order', orderSchema);
