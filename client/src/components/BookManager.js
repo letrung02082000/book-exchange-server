@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
-import { Table, Button, Modal, ListGroup } from "react-bootstrap";
-import "./BookManager.css";
-import axios from "axios";
-import FomrEditBook from "./FormEditBook";
+import { useEffect, useState } from 'react';
+import { Table, Button, Modal, ListGroup } from 'react-bootstrap';
+import './BookManager.css';
+import axios from 'axios';
+import FomrEditBook from './FormEditBook';
+import FormAddCategory from './FormAddCategory';
 export default (props) => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
+    const [dialog, setDialog] = useState(null);
+    function setShowInserting(_id = null) {}
+    const [showedBook, setShowedBook] = useState(null);
+    const [showedCategory, setShowedCategory] = useState(null);
+
     useEffect(() => {
         axios
-            .get("/api/book/query", { params: { limit: 30, page: page } })
+            .get('/api/book/query', { params: { limit: 30, page: page } })
             .then((res) => res.data)
             .then((res) => {
                 console.log(res);
-                if (res.type == "Valid") setData(res.data);
+                if (res.type == 'Valid') setData(res.data);
                 else setData([]);
             });
     }, [page]);
@@ -31,10 +37,10 @@ export default (props) => {
     };
     const pushIdTodelete = (_id) => {
         axios
-            .post("/api/book/delete", { _id: _id })
+            .post('/api/book/delete', { _id: _id })
             .then((res) => res.data)
             .then((res) => {
-                if (res.type == "Valid") {
+                if (res.type == 'Valid') {
                     console.log(res);
                     setDialog(null);
                     let tmp = [...data];
@@ -49,20 +55,19 @@ export default (props) => {
                 }
             });
     };
-    const [dialog, setDialog] = useState(null);
-    function setShowInserting(_id = null) {}
-    const [showedBook, setShowedBook] = useState(null);
+
     return (
-        <div>
+        <div className='modal-container'>
             <Modal
                 show={!!showedBook}
                 onHide={() => setShowedBook(null)}
-                backdrop="static"
+                backdrop='static'
                 // keyboard={false}
+                dialogClassName='modal-90w'
             >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {showedBook && showedBook._id ? "Edit" : "Add"} book
+                        {showedBook && showedBook._id ? 'Edit' : 'Add'} book
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -79,7 +84,7 @@ export default (props) => {
             <Modal
                 show={!!dialog}
                 onHide={() => setDialog(null)}
-                backdrop="static"
+                backdrop='static'
                 // keyboard={false}
             >
                 <Modal.Header closeButton>
@@ -102,22 +107,48 @@ export default (props) => {
                         ))}
                 </Modal.Footer>
             </Modal>
+
+            <Modal
+                show={!!showedCategory}
+                onHide={() => setShowedCategory(null)}
+                backdrop='static'
+                // keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Thêm thể loại sách</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showedCategory && (
+                        <FormAddCategory
+                            handleClose={() => setShowedCategory(null)}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
             <div>
                 <h2>Quản lí sách</h2>
-                <Button
-                    className="btn-new-book"
-                    onClick={() => setShowedBook({ _id: null })}
-                >
-                    Thêm sách
-                </Button>
+                <div className='all-btn'>
+                    <Button
+                        className='btn-new-book'
+                        onClick={() => setShowedBook({ _id: null })}
+                    >
+                        Thêm sách
+                    </Button>
+                    <Button
+                        className='btn-new-category'
+                        onClick={() => setShowedCategory(true)}
+                    >
+                        Thêm Thể loại
+                    </Button>
+                </div>
             </div>
             <Table
                 responsive
-                className="table"
+                className='table'
                 striped
                 bordered
                 hover
-                size="sm"
+                size='sm'
             >
                 <thead>
                     <tr>
@@ -135,7 +166,7 @@ export default (props) => {
                 <tbody>
                     {data.length != 0 ? (
                         data.map((e, index) => (
-                            <tr style={{ cursor: "pointer" }} key={e._id}>
+                            <tr style={{ cursor: 'pointer' }} key={e._id}>
                                 <td>{index + 1}</td>
                                 <td>{e.sku}</td>
                                 <td>{e.name}</td>
@@ -144,8 +175,8 @@ export default (props) => {
                                 <td>{e.quantity}</td>
                                 <td>
                                     {e.description
-                                        ? e.description.substr(0, 40) + "..."
-                                        : ""}
+                                        ? e.description.substr(0, 40) + '...'
+                                        : ''}
                                 </td>
                                 <td onClick={() => setShowedBook(e)}>
                                     {e.others &&
@@ -153,10 +184,10 @@ export default (props) => {
                                             <p
                                                 style={{
                                                     fontSize: 14,
-                                                    margin: 0
+                                                    margin: 0,
                                                 }}
                                             >
-                                                {e.key + ": " + e.value}
+                                                {e.key + ': ' + e.value}
                                             </p>
                                         ))}
                                     {e.others && e.others.length > 3 && (
@@ -166,7 +197,7 @@ export default (props) => {
                                 <td>
                                     <Button
                                         onClick={() => setShowedBook(e)}
-                                        variant="secondary"
+                                        variant='secondary'
                                     >
                                         Sửa
                                     </Button>
@@ -175,31 +206,31 @@ export default (props) => {
                                         style={{ zIndex: 1 }}
                                         onClick={() => {
                                             setDialog({
-                                                title: "Xóa",
+                                                title: 'Xóa',
                                                 message:
-                                                    "Bạn có chắc muốn xóa sách " +
+                                                    'Bạn có chắc muốn xóa sách ' +
                                                     e.name,
                                                 button: [
                                                     {
-                                                        title: "Hủy",
+                                                        title: 'Hủy',
                                                         action: () =>
-                                                            setDialog(null)
+                                                            setDialog(null),
                                                     },
                                                     {
-                                                        title: "Xóa",
-                                                        style: "danger",
+                                                        title: 'Xóa',
+                                                        style: 'danger',
                                                         action: () => {
                                                             console.log(e);
                                                             pushIdTodelete(
                                                                 e._id
                                                             );
-                                                        }
-                                                    }
-                                                ]
+                                                        },
+                                                    },
+                                                ],
                                             });
                                         }}
                                         style={{ marginLeft: 10 }}
-                                        variant="danger"
+                                        variant='danger'
                                     >
                                         Xóa
                                     </Button>
@@ -211,18 +242,18 @@ export default (props) => {
                     )}
                 </tbody>
             </Table>
-            <ul className="btn-page">
+            <ul className='btn-page'>
                 <li>{page > 3 && <p>...</p>}</li>
 
                 <li onClick={() => setPage(page - 2)}>
-                    {page - 2 > 0 && <p>{page - 2}</p>}{" "}
+                    {page - 2 > 0 && <p>{page - 2}</p>}{' '}
                 </li>
 
                 <li onClick={() => setPage(page - 1)}>
-                    {page - 1 > 0 && <p>{page - 1}</p>}{" "}
+                    {page - 1 > 0 && <p>{page - 1}</p>}{' '}
                 </li>
 
-                <li style={{ backgroundColor: "#ff0000" }}>
+                <li style={{ backgroundColor: '#ff0000' }}>
                     <p>{page}</p>
                 </li>
                 <li onClick={() => setPage(page + 1)}>
@@ -232,7 +263,7 @@ export default (props) => {
                     <p>{page + 2}</p>
                 </li>
                 <li>
-                    {" "}
+                    {' '}
                     <p>...</p>
                 </li>
             </ul>

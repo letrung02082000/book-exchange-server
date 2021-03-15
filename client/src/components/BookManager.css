@@ -26,3 +26,17 @@
 
     color: rgb(0, 0, 0);
 }
+
+.all-btn {
+    display: flex;
+    
+}
+
+.modal-90w {
+    width: 90%;
+    max-width: 100%;
+}
+
+.modal-container {
+    width: 100%;
+}
