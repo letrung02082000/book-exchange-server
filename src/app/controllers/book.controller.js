@@ -15,9 +15,18 @@ module.exports = {
     async getBooksPerPage(req, res) {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const quantity = parseInt(req.query.quantity);
 
         try {
-            const books = await bookModel.loadBookPerPage(page, limit);
+            let books = [];
+            if (quantity == 0) {
+                books = await bookModel.loadBookPerPageWithQuantity(
+                    page,
+                    limit
+                );
+            } else {
+                books = await bookModel.loadBookPerPage(page, limit);
+            }
 
             if (books.length > 0) {
                 res.json({ type: 'Valid', data: books });

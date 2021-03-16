@@ -23,7 +23,13 @@ const BookModel = mongoose.model('book', bookSchema);
 
 module.exports = {
     loadAllBooks() {
-        return BookModel.find({}).sort({ pushtime: -1 }).lean();
+        return BookModel.find().sort({ pushtime: -1 }).lean();
+    },
+
+    loadAllBooksWithQuantity() {
+        return BookModel.find({ quantity: { $gt: 0 } })
+            .sort({ pushtime: -1 })
+            .lean();
     },
 
     loadBookById(bookId) {
@@ -43,6 +49,15 @@ module.exports = {
             .skip((page - 1) * limit)
             .lean();
     },
+
+    loadBookPerPageWithQuantity(page, limit) {
+        return BookModel.find({ quantity: { $gt: 0 } })
+            .sort({ pushtime: -1 })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .lean();
+    },
+
     removeBookById(_id) {
         return BookModel.findByIdAndDelete(_id).lean();
     },
@@ -69,7 +84,7 @@ module.exports = {
     },
 
     loadBestSeller(page, limit) {
-        return BookModel.find()
+        return BookModel.find({ quantity: { $gt: 0 } })
             .sort({ buyCount: -1 })
             .limit(limit)
             .skip((page - 1) * limit)
