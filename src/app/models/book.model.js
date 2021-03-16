@@ -17,6 +17,7 @@ const bookSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: 'category' },
 
     buyCount: { type: Number, default: 0 },
+    buyCount: { type: Number, default: 0 },
 });
 
 const BookModel = mongoose.model('book', bookSchema);
@@ -86,6 +87,14 @@ module.exports = {
     loadBestSeller(page, limit) {
         return BookModel.find({ quantity: { $gt: 0 } })
             .sort({ buyCount: -1 })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .lean();
+    },
+
+    loadFavorite(page, limit) {
+        return BookModel.find({ quantity: { $gt: 0 } })
+            .sort({ favorite: -1 })
             .limit(limit)
             .skip((page - 1) * limit)
             .lean();

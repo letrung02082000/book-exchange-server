@@ -99,4 +99,22 @@ module.exports = {
             });
         }
     },
+
+    async getFavorite(req, res) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const book = await bookModel.loadFavorite(page, limit);
+
+        if (book.length > 0) {
+            return res.json({
+                type: 'Valid',
+                data: book,
+            });
+        }
+
+        return res.json({
+            type: 'Invalid',
+        });
+    },
 };

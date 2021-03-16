@@ -6,6 +6,7 @@ const bookController = require('../app/controllers/book.controller.js');
 const adminAuth = require('../app/middleware/adminAuth');
 router.get('/getAll', bookController.getAllBooks);
 router.get('/bestseller', bookController.getBestSeller);
+router.get('/favorite', bookController.getFavorite);
 router.get('/sku/:bookSku', bookController.getBookBySku);
 router.get('/query', bookController.getBooksPerPage);
 router.get('/:id', bookController.getBookById);
