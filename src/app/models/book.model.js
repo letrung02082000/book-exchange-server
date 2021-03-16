@@ -75,4 +75,10 @@ module.exports = {
             .skip((page - 1) * limit)
             .lean();
     },
+
+    async updateQuantity(bookId, newQuantity) {
+        let book = await BookModel.findById(mongoose.Types.ObjectId(bookId));
+        book.quantity = newQuantity;
+        await book.save();
+    },
 };

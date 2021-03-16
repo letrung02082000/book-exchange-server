@@ -11,10 +11,16 @@ module.exports = {
 
         const { data, err } = await orderModel.createOrder(req.body);
 
+        if (err) {
+            return res.json({
+                type: 'Invalid',
+                err,
+            });
+        }
+
         return res.json({
             type: 'Valid',
             data: data,
-            err: err,
         });
     },
 };
