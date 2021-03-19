@@ -12,29 +12,35 @@ module.exports = {
         }
     },
 
-    async getBooksPerPage(req, res) {
+    async getBooksWithQuery(req, res) {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const category = req.query.category;
         const quantity = parseInt(req.query.quantity);
 
-        try {
-            let books = [];
-            if (quantity == 0) {
+        let books = [];
+        if (quantity == 0) {
+            try {
                 books = await bookModel.loadBookPerPageWithQuantity(
                     page,
-                    limit
+                    limit,
+                    category
                 );
-            } else {
-                books = await bookModel.loadBookPerPage(page, limit);
+            } catch (error) {
+                res.json({ type: 'Invalid', err: 'Category không hợp lệ' });
             }
+        } else {
+            try {
+                books = await bookModel.loadBookPerPage(page, limit, category);
+            } catch (error) {
+                res.json({ type: 'Invalid', err: 'Category không hợp lệ' });
+            }
+        }
 
-            if (books.length > 0) {
-                res.json({ type: 'Valid', data: books });
-            } else {
-                res.json({ type: 'Invalid' });
-            }
-        } catch (error) {
-            console.log(error);
+        if (books.length > 0) {
+            res.json({ type: 'Valid', data: books });
+        } else {
+            res.json({ type: 'Invalid', err: 'Không có dữ liệu' });
         }
     },
 

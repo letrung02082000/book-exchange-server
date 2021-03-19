@@ -14,7 +14,7 @@ const bookSchema = new Schema({
     others: { type: Array, default: [] },
 
     //author: { type: Schema.Types.ObjectId },
-    category: { type: Schema.Types.ObjectId, ref: 'category' },
+    category: { type: Schema.Types.ObjectId, ref: 'categories' },
 
     buyCount: { type: Number, default: 0 },
     buyCount: { type: Number, default: 0 },
@@ -36,23 +36,48 @@ module.exports = {
     loadBookById(bookId) {
         return BookModel.findById({
             _id: mongoose.Types.ObjectId(bookId),
-        }).lean();
+        })
+            .populate('category')
+            .lean();
     },
 
     loadBookBySku(bookSku) {
-        return BookModel.find({ sku: bookSku }).lean();
+        return BookModel.find({ sku: bookSku }).populate('category').lean();
     },
 
-    loadBookPerPage(page, limit) {
-        return BookModel.find()
+    loadBookPerPage(page, limit, category) {
+        if (category) {
+            return BookModel.find({
+                category: mongoose.Types.ObjectId(category),
+            })
+                .sort({ pushtime: -1 })
+                .limit(limit)
+                .skip((page - 1) * limit)
+                .lean();
+        }
+
+        return BookModel.find({})
             .sort({ pushtime: -1 })
             .limit(limit)
             .skip((page - 1) * limit)
             .lean();
     },
 
-    loadBookPerPageWithQuantity(page, limit) {
-        return BookModel.find({ quantity: { $gt: 0 } })
+    loadBookPerPageWithQuantity(page, limit, category) {
+        if (category) {
+            return BookModel.find({
+                quantity: { $gt: 0 },
+                category: mongoose.Types.ObjectId(category),
+            })
+                .sort({ pushtime: -1 })
+                .limit(limit)
+                .skip((page - 1) * limit)
+                .lean();
+        }
+
+        return BookModel.find({
+            quantity: { $gt: 0 },
+        })
             .sort({ pushtime: -1 })
             .limit(limit)
             .skip((page - 1) * limit)
