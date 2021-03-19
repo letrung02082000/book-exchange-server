@@ -19,7 +19,7 @@ const bookSchema = new Schema({
     buyCount: { type: Number, default: 0 },
     buyCount: { type: Number, default: 0 },
 });
-bookSchema.index({ '$**': 'text' });
+bookSchema.index({ name: 'text' });
 
 const BookModel = mongoose.model('book', bookSchema);
 
