@@ -19,7 +19,7 @@ const bookSchema = new Schema({
     buyCount: { type: Number, default: 0 },
     buyCount: { type: Number, default: 0 },
 });
-bookSchema.index({ name: 'text' });
+bookSchema.index({ '$**': 'text' });
 
 const BookModel = mongoose.model('book', bookSchema);
 
@@ -71,7 +71,9 @@ module.exports = {
             query.push({ $limit: limit });
         }
 
-        if (sort) {
+        if (search) {
+            query.push({ $sort: { score: { $meta: 'textScore' }, name: -1 } });
+        } else {
             query.push({
                 $sort: { pushtime: sort },
             });
