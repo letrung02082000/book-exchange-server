@@ -75,7 +75,7 @@ module.exports = {
             query.push({ $sort: { score: { $meta: 'textScore' }, name: -1 } });
         } else {
             query.push({
-                $sort: { pushtime: sort },
+                $sort: { pushtime: -1 },
             });
         }
 
