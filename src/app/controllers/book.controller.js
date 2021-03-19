@@ -16,25 +16,24 @@ module.exports = {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const category = req.query.category;
+        const search = req.query.search;
         const quantity = parseInt(req.query.quantity);
+        const sort = parseInt(req.query.sort);
+        console.log(quantity);
 
         let books = [];
-        if (quantity == 0) {
-            try {
-                books = await bookModel.loadBookPerPageWithQuantity(
-                    page,
-                    limit,
-                    category
-                );
-            } catch (error) {
-                res.json({ type: 'Invalid', err: 'Category không hợp lệ' });
-            }
-        } else {
-            try {
-                books = await bookModel.loadBookPerPage(page, limit, category);
-            } catch (error) {
-                res.json({ type: 'Invalid', err: 'Category không hợp lệ' });
-            }
+        try {
+            books = await bookModel.query(
+                page,
+                limit,
+                category,
+                search,
+                quantity,
+                sort
+            );
+        } catch (error) {
+            console.log(error);
+            res.json({ type: 'Invalid', err: 'Có lỗi xảy ra' });
         }
 
         if (books.length > 0) {

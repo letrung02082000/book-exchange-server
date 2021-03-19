@@ -8,7 +8,7 @@ router.get('/getAll', bookController.getAllBooks);
 router.get('/bestseller', bookController.getBestSeller);
 router.get('/favorite', bookController.getFavorite);
 router.get('/sku/:bookSku', bookController.getBookBySku);
-router.get('/query', bookController.getBooksWithQuery);
+router.get('/query', bookController.getBooksWithQuery); //query include: page, limit, category, search, quantity
 router.get('/:id', bookController.getBookById);
 
 router.post('/push', adminAuth, bookController.updateBookById);

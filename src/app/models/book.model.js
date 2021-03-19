@@ -19,6 +19,7 @@ const bookSchema = new Schema({
     buyCount: { type: Number, default: 0 },
     buyCount: { type: Number, default: 0 },
 });
+bookSchema.index({ '$**': 'text' });
 
 const BookModel = mongoose.model('book', bookSchema);
 
@@ -45,43 +46,38 @@ module.exports = {
         return BookModel.find({ sku: bookSku }).populate('category').lean();
     },
 
-    loadBookPerPage(page, limit, category) {
-        if (category) {
-            return BookModel.find({
-                category: mongoose.Types.ObjectId(category),
-            })
-                .sort({ pushtime: -1 })
-                .limit(limit)
-                .skip((page - 1) * limit)
-                .lean();
+    query(page, limit, category, search, quantity, sort) {
+        const query = [];
+        let match = {};
+
+        if (search) {
+            match = { $text: { $search: search } };
         }
 
-        return BookModel.find({})
-            .sort({ pushtime: -1 })
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .lean();
-    },
-
-    loadBookPerPageWithQuantity(page, limit, category) {
         if (category) {
-            return BookModel.find({
-                quantity: { $gt: 0 },
-                category: mongoose.Types.ObjectId(category),
-            })
-                .sort({ pushtime: -1 })
-                .limit(limit)
-                .skip((page - 1) * limit)
-                .lean();
+            match.category = mongoose.Types.ObjectId(category);
         }
 
-        return BookModel.find({
-            quantity: { $gt: 0 },
-        })
-            .sort({ pushtime: -1 })
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .lean();
+        if (quantity == 0) {
+            match.quantity = { $gt: 0 };
+        }
+
+        query.push({ $match: match });
+
+        if (page && limit) {
+            query.push({
+                $skip: (page - 1) * limit,
+            });
+            query.push({ $limit: limit });
+        }
+
+        if (sort) {
+            query.push({
+                $sort: { pushtime: sort },
+            });
+        }
+
+        return BookModel.aggregate(query);
     },
 
     removeBookById(_id) {
