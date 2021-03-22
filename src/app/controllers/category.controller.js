@@ -38,7 +38,7 @@ module.exports = {
         let result = [];
 
         for (let child of categories) {
-            let category = { title: child.name };
+            let category = { title: child.name, id: child._id };
             const book = await BookModel.query(1, 10, child._id, null, 0);
 
             if (book) {
