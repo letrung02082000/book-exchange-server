@@ -7,6 +7,10 @@ mongoose
             useUnifiedTopology: true,
         }
     )
+    .then(
+        () => console.log('db connected!'),
+        (err) => console.log(err)
+    )
     .catch((error) => handleError(error));
 
 handleError = (e) => {
