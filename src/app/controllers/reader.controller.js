@@ -3,8 +3,8 @@ const ReaderModel = require('../models/reader.model');
 
 module.exports = {
     async query(req, res) {
-        const limit = req.query.limit || 10;
-        const page = req.query.page || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
 
         const post = await ReaderModel.loadAllPosts(page, limit);
 
