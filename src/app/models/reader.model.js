@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const UserModel = require('./user.model');
 const Schema = mongoose.Schema;
 
 const readerSchema = new Schema({
@@ -6,7 +7,7 @@ const readerSchema = new Schema({
     book: { type: Schema.Types.ObjectId, required: true, ref: 'book' },
     pending: { type: Boolean, default: false },
     date: { type: Date, default: Date.now },
-    likecount: { type: Number, required: true, default: 0 },
+    likelist: [{ type: Schema.Types.ObjectId }],
     title: { type: String, require: true },
     content: { type: String, require: true },
 });
@@ -14,6 +15,10 @@ const readerSchema = new Schema({
 const ReaderModel = mongoose.model('reader', readerSchema);
 
 module.exports = {
+    async findPostById(id) {
+        return await ReaderModel.findById(id);
+    },
+
     loadAllPosts(page, limit) {
         return ReaderModel.find()
             .populate('user', 'username')
@@ -27,6 +32,41 @@ module.exports = {
         const data = await ReaderModel.create(post);
 
         if (data) return { data };
-        return { err: 'Create post fail ' };
+        return { err: 'create post fail' };
+    },
+
+    async addToLikeList(userId, postId) {
+        const user = await UserModel.findUserById(userId);
+        if (!user) return { err: 'user not found' };
+
+        const post = await ReaderModel.findById(postId);
+        if (!post) return { err: 'no post found' };
+
+        if (post.likelist.includes(mongoose.Types.ObjectId(userId)))
+            return { err: 'post liked' };
+
+        post.likelist.push(mongoose.Types.ObjectId(userId));
+        const data = await post.save();
+
+        if (data) return { data };
+        return { err: 'error occured' };
+    },
+
+    async removeFromLikeList(userId, postId) {
+        const user = await UserModel.findUserById(userId);
+        if (!user) return { err: 'user not found' };
+
+        const post = await ReaderModel.findById(postId);
+        if (!post) return { err: 'no post found' };
+
+        if (post.likelist.includes(mongoose.Types.ObjectId(userId))) {
+            const tmp = post.likelist.filter((item) => item != userId);
+            post.likelist = tmp;
+            const data = await post.save();
+
+            if (data) return { data };
+        }
+
+        return { err: 'error occured' };
     },
 };
