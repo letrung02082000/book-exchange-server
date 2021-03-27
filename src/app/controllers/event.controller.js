@@ -1,4 +1,5 @@
 const EventModel = require('../models/event.model');
+const UserModel = require('../models/user.model');
 
 module.exports = {
     async addEvent(req, res) {
@@ -35,7 +36,7 @@ module.exports = {
         const data = await EventModel.loadAllEvent(page, limit);
 
         if (!data || data.length == 0)
-            return res.json({ type: 'Invalid', err: 'no event found' });
+            return res.json({ type: 'Invalid', err: 'event not found' });
 
         return res.json({ type: 'Valid', data });
     },
@@ -44,8 +45,46 @@ module.exports = {
         const data = await EventModel.findEventById(req.params.id);
 
         if (!data || data.length == 0)
-            return res.json({ type: 'Invalid', err: 'no event found' });
+            return res.json({ type: 'Invalid', err: 'event not found' });
 
         return res.json({ type: 'Valid', data });
     },
+
+    // async joinEvent(req, res) {
+    //     const { eventId } = req.body;
+    //     const userId = req.headers.id;
+
+    //     if (!eventId)
+    //         return res.json({ type: 'Invalid', err: 'eventId required' });
+
+    //     const eventData = await EventModel.addToJoinList(eventId, userId);
+    //     if (eventData.err)
+    //         return res.json({ type: 'Invalid', err: eventData.err });
+
+    //     const userData = await UserModel.addToEventList(userId, eventId);
+    //     if (userData.err)
+    //         return res.json({ type: 'Invalid', err: userData.err });
+
+    //     return res.json({ type: 'Valid', data: eventData.data });
+    // },
+
+    // async leaveEvent(req, res) {
+    //     const { eventId } = req.body;
+    //     const userId = req.headers.id;
+
+    //     if (!eventId)
+    //         return res.json({ type: 'Invalid', err: 'eventId required' });
+
+    //     const eventData = await EventModel.removeFromJoinList(eventId, userId);
+
+    //     if (eventData.err)
+    //         return res.json({ type: 'Invalid', err: eventData.data });
+
+    //     const userData = await UserModel.removeFromEventList(userId, eventId);
+
+    //     if (userData.err)
+    //         return res.json({ type: 'Invalid', err: userData.err });
+
+    //     return res.json({ type: 'Valid', data: eventData.data });
+    // },
 };

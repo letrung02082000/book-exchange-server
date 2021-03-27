@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String },
     likedposts: [{ type: mongoose.Types.ObjectId, ref: 'reader' }],
     wishlist: [{ type: mongoose.Types.ObjectId, ref: 'book' }],
+    // eventlist: [{ type: mongoose.Types.ObjectId, ref: 'event' }],
 });
 
 const UserModel = mongoose.model('user', userSchema);
@@ -78,7 +79,7 @@ module.exports = {
         // if (!post) return { err: 'No post found' };
 
         const user = await UserModel.findById(userId);
-        if (!user) return { err: 'no user found' };
+        if (!user) return { err: 'user not found' };
 
         if (user.likedposts.includes(mongoose.Types.ObjectId(postId)))
             return { err: 'post liked' };
@@ -93,7 +94,7 @@ module.exports = {
 
     async removeFromLikedPosts(userId, postId) {
         const user = await UserModel.findById(userId);
-        if (!user) return { err: 'no user found' };
+        if (!user) return { err: 'user not found' };
 
         if (user.likedposts.includes(mongoose.Types.ObjectId(postId))) {
             const tmp = user.likedposts.filter((item) => item != postId);
@@ -108,10 +109,10 @@ module.exports = {
 
     async addToWishList(userId, bookId) {
         const user = UserModel.findById(userId);
-        if (!user) return { err: 'no user found' };
+        if (!user) return { err: 'user not found' };
 
         const book = bookModel.loadBookById(bookId);
-        if (!book) return { err: 'no book found' };
+        if (!book) return { err: 'book not found' };
 
         user.wishlist.push(mongoose.Types.ObjectId(bookId));
         const data = await user.save();
@@ -119,4 +120,31 @@ module.exports = {
         if (!data) return { err: 'error occured' };
         return { data };
     },
+
+    // async addToEventList(userId, eventId) {
+    //     const user = UserModel.findById(userId);
+    //     if (!user) return { err: 'user not found' };
+
+    //     console.log(user.eventlist);
+
+    //     if (user.eventlist.includes(mongoose.Types.ObjectId()))
+    //         return { err: 'event joined' };
+
+    //     user.eventlist.push(mongoose.Types.ObjectId(eventId));
+    //     await user.save();
+    //     return { data: user };
+    // },
+
+    // async removeFromEventList(userId, eventId) {
+    //     const user = UserModel.findById(userId);
+    //     if (!user) return { err: 'user not found' };
+
+    //     if (user.eventlist.includes(mongoose.Types.ObjectId(eventId))) {
+    //         let tmp = user.eventlist.filter((child) => child != eventId);
+    //         user.eventlist = tmp;
+    //     }
+
+    //     await user.save();
+    //     return { data: user };
+    // },
 };
