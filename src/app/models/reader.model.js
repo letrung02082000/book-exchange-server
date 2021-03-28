@@ -25,7 +25,8 @@ module.exports = {
             .populate('book')
             .sort({ date: -1 })
             .skip((page - 1) * limit)
-            .limit(limit);
+            .limit(limit)
+            .lean();
     },
 
     async createPost(post) {

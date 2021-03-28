@@ -1,12 +1,39 @@
 const mongoose = require('mongoose');
+const postLikeModel = require('../models/post.like.model');
 const ReaderModel = require('../models/reader.model');
 
 module.exports = {
     async query(req, res) {
         const limit = parseInt(req.query.limit) || 10;
         const page = parseInt(req.query.page) || 1;
+        const userId = req.headers.id || null;
 
-        const post = await ReaderModel.loadAllPosts(page, limit);
+        let post = await ReaderModel.loadAllPosts(page, limit);
+
+        let newpost = [];
+
+        if (userId) {
+            for (let child of post) {
+                let newchild;
+                const { data } = await postLikeModel.findPostLike(
+                    child._id,
+                    userId
+                );
+
+                // if (data && data.length > 0) {
+                //     newchild = { ...child, postlike: true };
+                // } else {
+                //     newchild = { ...child, postlike: false };
+                // }
+
+                // newpost.push(newchild);
+                if (data.length > 0) {
+                    child.postlike = true;
+                } else {
+                    child.postlike = false;
+                }
+            }
+        }
 
         if (post.length > 0) return res.json({ type: 'Valid', data: post });
         return res.json({ type: 'Invalid', err: 'No post found!' });

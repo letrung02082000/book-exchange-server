@@ -10,6 +10,15 @@ const postLikeSchema = new Schema({
 const PostLikeModel = mongoose.model('postlike', postLikeSchema);
 
 module.exports = {
+    async findPostLike(postId, userId) {
+        const postLike = await PostLikeModel.find({
+            post: mongoose.Types.ObjectId(postId),
+            user: mongoose.Types.ObjectId(userId),
+        });
+
+        return { data: postLike };
+    },
+
     async addPostLike(postId, userId) {
         const post = await readerModel.findPostById(postId);
 
