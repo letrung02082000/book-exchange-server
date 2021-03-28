@@ -33,6 +33,10 @@ module.exports = {
                     child.postlike = false;
                 }
             }
+        } else {
+            for (let child of post) {
+                child.postlike = false;
+            }
         }
 
         if (post.length > 0) return res.json({ type: 'Valid', data: post });
