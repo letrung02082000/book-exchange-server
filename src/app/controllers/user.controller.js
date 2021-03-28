@@ -35,38 +35,38 @@ module.exports.signup = async (req, res) => {
     return res.json({ type: 'Valid', status: 'Success', data });
 };
 
-module.exports.likePost = async function (req, res) {
-    const { postId } = req.body;
-    console.log(postId);
+// module.exports.likePost = async function (req, res) {
+//     const { postId } = req.body;
+//     console.log(postId);
 
-    if (!postId)
-        return res.json({
-            type: 'Invalid',
-            err: 'postId are required',
-        });
+//     if (!postId)
+//         return res.json({
+//             type: 'Invalid',
+//             err: 'postId are required',
+//         });
 
-    const reader = await ReaderModel.addToLikeList(req.headers.id, postId);
-    if (reader.err) res.json({ err: reader.err });
+//     const reader = await ReaderModel.addToLikeList(req.headers.id, postId);
+//     if (reader.err) res.json({ err: reader.err });
 
-    const user = await UserModel.addToLikedPosts(req.headers.id, postId);
-    if (user.err) return res.json({ type: 'Invalid', err: user.err });
-    if (user.data) return res.json({ type: 'Valid', data: user.data });
-};
+//     const user = await UserModel.addToLikedPosts(req.headers.id, postId);
+//     if (user.err) return res.json({ type: 'Invalid', err: user.err });
+//     if (user.data) return res.json({ type: 'Valid', data: user.data });
+// };
 
-module.exports.removeFromLikeList = async function (req, res) {
-    const { postId } = req.body;
-    console.log(postId);
+// module.exports.removeFromLikeList = async function (req, res) {
+//     const { postId } = req.body;
+//     console.log(postId);
 
-    if (!postId)
-        return res.json({
-            type: 'Invalid',
-            err: 'postId are required',
-        });
+//     if (!postId)
+//         return res.json({
+//             type: 'Invalid',
+//             err: 'postId are required',
+//         });
 
-    const reader = await ReaderModel.removeFromLikeList(req.headers.id, postId);
-    if (reader.err) return res.json({ type: 'Invalid', err: reader.err });
+//     const reader = await ReaderModel.removeFromLikeList(req.headers.id, postId);
+//     if (reader.err) return res.json({ type: 'Invalid', err: reader.err });
 
-    const user = await UserModel.removeFromLikedPosts(req.headers.id, postId);
-    if (user.err) return res.json({ type: 'Invalid', err: user.err });
-    if (user.data) return res.json({ type: 'Valid', data: user.data });
-};
+//     const user = await UserModel.removeFromLikedPosts(req.headers.id, postId);
+//     if (user.err) return res.json({ type: 'Invalid', err: user.err });
+//     if (user.data) return res.json({ type: 'Valid', data: user.data });
+// };

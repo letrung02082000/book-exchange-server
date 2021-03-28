@@ -7,7 +7,7 @@ const readerSchema = new Schema({
     book: { type: Schema.Types.ObjectId, required: true, ref: 'book' },
     pending: { type: Boolean, default: false },
     date: { type: Date, default: Date.now },
-    likelist: [{ type: Schema.Types.ObjectId }],
+    // likelist: [{ type: Schema.Types.ObjectId }],
     title: { type: String, require: true },
     content: { type: String, require: true },
 });
@@ -35,38 +35,38 @@ module.exports = {
         return { err: 'create post fail' };
     },
 
-    async addToLikeList(userId, postId) {
-        const user = await UserModel.findUserById(userId);
-        if (!user) return { err: 'user not found' };
+    // async addToLikeList(userId, postId) {
+    //     const user = await UserModel.findUserById(userId);
+    //     if (!user) return { err: 'user not found' };
 
-        const post = await ReaderModel.findById(postId);
-        if (!post) return { err: 'no post found' };
+    //     const post = await ReaderModel.findById(postId);
+    //     if (!post) return { err: 'no post found' };
 
-        if (post.likelist.includes(mongoose.Types.ObjectId(userId)))
-            return { err: 'post liked' };
+    //     if (post.likelist.includes(mongoose.Types.ObjectId(userId)))
+    //         return { err: 'post liked' };
 
-        post.likelist.push(mongoose.Types.ObjectId(userId));
-        const data = await post.save();
+    //     post.likelist.push(mongoose.Types.ObjectId(userId));
+    //     const data = await post.save();
 
-        if (data) return { data };
-        return { err: 'error occured' };
-    },
+    //     if (data) return { data };
+    //     return { err: 'error occured' };
+    // },
 
-    async removeFromLikeList(userId, postId) {
-        const user = await UserModel.findUserById(userId);
-        if (!user) return { err: 'user not found' };
+    // async removeFromLikeList(userId, postId) {
+    //     const user = await UserModel.findUserById(userId);
+    //     if (!user) return { err: 'user not found' };
 
-        const post = await ReaderModel.findById(postId);
-        if (!post) return { err: 'no post found' };
+    //     const post = await ReaderModel.findById(postId);
+    //     if (!post) return { err: 'no post found' };
 
-        if (post.likelist.includes(mongoose.Types.ObjectId(userId))) {
-            const tmp = post.likelist.filter((item) => item != userId);
-            post.likelist = tmp;
-            const data = await post.save();
+    //     if (post.likelist.includes(mongoose.Types.ObjectId(userId))) {
+    //         const tmp = post.likelist.filter((item) => item != userId);
+    //         post.likelist = tmp;
+    //         const data = await post.save();
 
-            if (data) return { data };
-        }
+    //         if (data) return { data };
+    //     }
 
-        return { err: 'error occured' };
-    },
+    //     return { err: 'error occured' };
+    // },
 };
