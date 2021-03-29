@@ -19,6 +19,13 @@ module.exports = {
         return { data: postLike };
     },
 
+    async countPostLike(postId) {
+        const postlike = await PostLikeModel.find({
+            post: mongoose.Types.ObjectId(postId),
+        }).lean();
+        return { data: postlike };
+    },
+
     async addPostLike(postId, userId) {
         const post = await readerModel.findPostById(postId);
 

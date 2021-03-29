@@ -12,6 +12,12 @@ module.exports = {
 
         let newpost = [];
 
+        for (let child of post) {
+            child.postlike = false;
+            const { data } = await postLikeModel.countPostLike(child._id);
+            child.likecount = data.length;
+        }
+
         if (userId) {
             for (let child of post) {
                 let newchild;
@@ -32,10 +38,6 @@ module.exports = {
                 } else {
                     child.postlike = false;
                 }
-            }
-        } else {
-            for (let child of post) {
-                child.postlike = false;
             }
         }
 
