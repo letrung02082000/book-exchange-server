@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     token: { type: String },
     username: { type: String },
+    tel: { type: String },
     avt: {
         type: String,
         default:
@@ -34,7 +35,9 @@ module.exports = {
             data = await UserModel.findById(user._id);
         }
 
-        data = await UserModel.findOne({ email: user.email });
+        data = await UserModel.findOne({ email: user.email }).populate(
+            'wishlist'
+        );
 
         if (!data) {
             return { err: 'user not found' };
@@ -113,16 +116,29 @@ module.exports = {
     // },
 
     async addToWishList(userId, bookId) {
-        const user = UserModel.findById(userId);
+        const user = await UserModel.findById(userId);
         if (!user) return { err: 'user not found' };
 
         const book = bookModel.loadBookById(bookId);
         if (!book) return { err: 'book not found' };
 
+        if (user.wishlist.includes(mongoose.Types.ObjectId(bookId))) {
+            return { err: 'book exist' };
+        }
+
         user.wishlist.push(mongoose.Types.ObjectId(bookId));
         const data = await user.save();
 
         if (!data) return { err: 'error occured' };
+        return { data };
+    },
+
+    async loadWishList(userId) {
+        const data = await UserModel.findById(userId)
+            .populate('wishlist')
+            .select({ wishlist: 1 });
+
+        if (!data) return { err: 'user not found' };
         return { data };
     },
 

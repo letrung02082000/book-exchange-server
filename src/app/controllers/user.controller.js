@@ -35,6 +35,28 @@ module.exports.signup = async (req, res) => {
     return res.json({ type: 'Valid', status: 'Success', data });
 };
 
+module.exports.addToWishList = async (req, res) => {
+    if (!req.body.bookId)
+        return res.json({ type: 'Invalid', err: 'bookId required' });
+
+    const { data, err } = await UserModel.addToWishList(
+        req.headers.id,
+        req.body.bookId
+    );
+
+    if (err) return res.json({ type: 'Invalid', err });
+
+    if (data) return res.json({ type: 'Valid', data });
+};
+
+module.exports.getWishList = async (req, res) => {
+    const { data, err } = await UserModel.loadWishList(req.headers.id);
+
+    if (err) return res.json({ type: 'Invalid', err });
+
+    if (data) return res.json({ type: 'Valid', data });
+};
+
 // module.exports.likePost = async function (req, res) {
 //     const { postId } = req.body;
 //     console.log(postId);
