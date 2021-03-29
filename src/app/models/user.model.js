@@ -35,9 +35,7 @@ module.exports = {
             data = await UserModel.findById(user._id);
         }
 
-        data = await UserModel.findOne({ email: user.email }).populate(
-            'wishlist'
-        );
+        data = await UserModel.findOne({ email: user.email });
 
         if (!data) {
             return { err: 'user not found' };
