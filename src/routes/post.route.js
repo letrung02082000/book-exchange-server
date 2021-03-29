@@ -6,12 +6,14 @@ const userauthenticationMiddleware = require('../app/middleware/userauthenticati
 
 router.get('/query', readerController.query);
 router.post('/create', readerController.addPost);
+// router.get('/like', userauthenticationMiddleware, postController.getLike);
 router.post('/like', userauthenticationMiddleware, postController.likePost);
 router.post(
-    '/removeLike',
+    '/removelike',
     userauthenticationMiddleware,
     postController.removeLike
 );
+router.get('/comment', postController.getComment);
 router.post(
     '/comment',
     userauthenticationMiddleware,

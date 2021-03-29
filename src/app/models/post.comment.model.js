@@ -43,4 +43,13 @@ module.exports = {
 
         return { data: postComment };
     },
+
+    async loadComment(postId) {
+        const postComment = await PostCommentModel.find({
+            post: mongoose.Types.ObjectId(postId),
+        })
+            .populate('user', 'username')
+            .lean();
+        return { data: postComment };
+    },
 };

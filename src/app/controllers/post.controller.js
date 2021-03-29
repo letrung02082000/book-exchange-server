@@ -70,4 +70,15 @@ module.exports = {
         if (err) return res.json({ type: 'Invalid', err });
         if (data) return res.json({ type: 'Valid', data });
     },
+
+    // async getLike(req, res){
+
+    // },
+
+    async getComment(req, res) {
+        const postId = req.query.post;
+        const { data } = await PostCommentModel.loadComment(postId);
+
+        if (data) return res.json({ type: 'Valid', data });
+    },
 };
