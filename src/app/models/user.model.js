@@ -31,9 +31,9 @@ module.exports = {
     async loginUser(user) {
         let data;
 
-        if (user._id) {
-            data = await UserModel.findById(user._id);
-        }
+        // if (user._id) {
+        //     data = await UserModel.findById(user._id);
+        // }
 
         data = await UserModel.findOne({ email: user.email });
 

@@ -29,6 +29,16 @@ module.exports = {
             .lean();
     },
 
+    loadPostsByBookId(page, limit, bookId) {
+        return ReaderModel.find({ book: bookId })
+            .populate({ path: 'user', select: ['avt', 'username'] })
+            .populate('book')
+            .sort({ date: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean();
+    },
+
     async createPost(post) {
         const data = await ReaderModel.create(post);
 

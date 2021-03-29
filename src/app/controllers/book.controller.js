@@ -1,5 +1,6 @@
 const { removeBookById, updateBookById } = require('../models/book.model');
 const bookModel = require('../models/book.model');
+const readerModel = require('../models/reader.model');
 module.exports = {
     async getAllBooks(req, res) {
         //find book in db sorted by time push
@@ -121,5 +122,16 @@ module.exports = {
         return res.json({
             type: 'Invalid',
         });
+    },
+
+    async getReviews(req, res) {
+        const bookId = req.params.id;
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const posts = await readerModel.loadPostsByBookId(page, limit, bookId);
+
+        if (posts) return res.json({ type: 'Valid', data: posts });
+        return res.json({ type: 'Invalid', err: 'error occured' });
     },
 };
