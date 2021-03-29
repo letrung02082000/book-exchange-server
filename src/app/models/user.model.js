@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     token: { type: String },
     username: { type: String },
+    avt: {
+        type: String,
+        default:
+            'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png',
+    },
     //likedposts: [{ type: mongoose.Types.ObjectId, ref: 'reader' }],
     wishlist: [{ type: mongoose.Types.ObjectId, ref: 'book' }],
     // eventlist: [{ type: mongoose.Types.ObjectId, ref: 'event' }],

@@ -49,7 +49,8 @@ module.exports = {
         const postComment = await PostCommentModel.find({
             post: mongoose.Types.ObjectId(postId),
         })
-            .populate('user', 'username')
+            .populate({ path: 'user', select: 'username' })
+            .populate({ path: 'user', select: 'avt' })
             .sort({ date: -1 })
             .lean();
         return { data: postComment };
