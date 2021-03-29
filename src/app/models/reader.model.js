@@ -21,7 +21,8 @@ module.exports = {
 
     loadAllPosts(page, limit) {
         return ReaderModel.find()
-            .populate('user', 'username')
+            .populate({ path: 'user', select: 'username' })
+            .populate({ path: 'user', select: 'avt' })
             .populate('book')
             .sort({ date: -1 })
             .skip((page - 1) * limit)
