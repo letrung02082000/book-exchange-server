@@ -6,6 +6,7 @@ const postCommentSchema = new Schema({
     post: { type: Schema.Types.ObjectId, required: true, ref: 'reader' },
     user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
     comment: { type: String, required: true },
+    date: { type: Date, default: Date.now },
 });
 
 const PostCommentModel = mongoose.model('postcomment', postCommentSchema);
@@ -49,6 +50,7 @@ module.exports = {
             post: mongoose.Types.ObjectId(postId),
         })
             .populate('user', 'username')
+            .sort({ date: -1 })
             .lean();
         return { data: postComment };
     },
