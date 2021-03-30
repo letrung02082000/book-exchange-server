@@ -3,8 +3,9 @@ const EventModel = require('./event.model');
 const Schema = mongoose.Schema;
 
 const eventUserSchema = new Schema({
-    eventId: { type: Schema.Types.ObjectId, required: true },
-    userId: { type: Schema.Types.ObjectId, required: true },
+    eventId: { type: Schema.Types.ObjectId, required: true, ref: 'event' },
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+    joined: { type: Boolean, required: true, default: false },
 });
 
 const EventUserModel = mongoose.model('eventuser', eventUserSchema);
@@ -39,5 +40,38 @@ module.exports = {
 
         if (data) return { data };
         else return { err: 'no data' };
+    },
+    loadJoinedEventsByUser(userId) {
+        return EventUserModel.find({
+            userId: mongoose.Types.ObjectId(userId),
+            joined: true,
+        })
+            .populate('eventId')
+            .lean();
+    },
+
+    loadAllEventsByUser(userId) {
+        return EventUserModel.find({
+            userId: mongoose.Types.ObjectId(userId),
+        })
+            .populate('eventId')
+            .lean();
+    },
+
+    loadJoinedUsersByEvent(eventId) {
+        return EventUserModel.find({
+            eventId: mongoose.Types.ObjectId(eventId),
+            joined: true,
+        })
+            .populate('userId')
+            .lean();
+    },
+
+    loadAllUsersByEvent(eventId) {
+        return EventUserModel.find({
+            eventId: mongoose.Types.ObjectId(eventId),
+        })
+            .populate('userId')
+            .lean();
     },
 };

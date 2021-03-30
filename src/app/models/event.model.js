@@ -13,6 +13,7 @@ const eventSchema = new Schema({
     content: { type: String, require: true },
     limit: { type: Number, required: true },
     imgurl: { type: String, required: true },
+    point: { type: Number, required: true, default: 0 },
 });
 
 const EventModel = mongoose.model('event', eventSchema);
@@ -31,6 +32,7 @@ module.exports = {
 
     async createEvent(event) {
         let newEvent = new EventModel(event);
+        newEvent.pending = true;
         const err = newEvent.validateSync();
 
         if (err) return { err: 'create post fail' };

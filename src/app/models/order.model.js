@@ -23,11 +23,25 @@ const orderSchema = new Schema({
     shipping: { type: Boolean, default: true }, // true: giao hàng tận nơi, false: nhận sách tại tủ sách
     payment: { type: Boolean, default: true }, //true: thanh toán khi nhận sách, false: thanh toán qua momo
     total: { type: Number, required: true },
+    point: { type: Number, required: true, default: 0 },
 });
 
 const OrderModel = mongoose.model('order', orderSchema);
 
 module.exports = {
+    loadOrdersByUser(userId) {
+        return OrderModel.find({
+            user: mongoose.Types.ObjectId(userId),
+        }).lean();
+    },
+
+    loadConfirmedOrdersByUser(userId) {
+        return OrderModel.find({
+            user: mongoose.Types.ObjectId(userId),
+            pending: false,
+        }).lean();
+    },
+
     async createOrder(order) {
         let newOrder;
         const orderid = require('order-id')('khoa-don-hang');
@@ -57,6 +71,7 @@ module.exports = {
 
             console.log(total);
             order.total = total;
+            order.point = total / 10000;
             order.orderId = id;
             order['orderDate'] = new Date();
 
