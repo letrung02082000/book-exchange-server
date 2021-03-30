@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema({
     token: { type: String },
     username: { type: String },
     tel: { type: String },
+    name: { type: String },
+    address: { type: String },
+    studentid: { type: String },
     avt: {
         type: String,
         default:
