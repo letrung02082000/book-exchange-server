@@ -7,6 +7,7 @@ const orderRoute = require('./order.route');
 const categoryRoute = require('./category.route');
 const postRoute = require('./post.route');
 const eventRoute = require('./event.route');
+const stationRoute = require('./station.route');
 
 router.use('/user', userRoute);
 router.use('/category', categoryRoute);
@@ -15,5 +16,6 @@ router.use('/order', orderRoute);
 router.use('/admin', adminRoute);
 router.use('/post', postRoute);
 router.use('/event', eventRoute);
+router.use('/station', stationRoute);
 
 module.exports = router;
