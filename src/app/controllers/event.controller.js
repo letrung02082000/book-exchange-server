@@ -67,6 +67,23 @@ module.exports = {
 
     async getEventById(req, res) {
         const data = await EventModel.findEventById(req.params.id);
+        const userId = req.headers.id;
+
+        if (userId) {
+            const isInEvent = await eventUserModel.checkUserInEvent(
+                data._id,
+                userId
+            );
+
+            if (isInEvent) {
+                data.registered = true;
+            }
+        } else {
+            data.registered = false;
+        }
+
+        const users = await eventUserModel.loadAllUsersByEvent(data._id);
+        data.joinnumber = users.length;
 
         if (!data || data.length == 0)
             return res.json({ type: 'Invalid', err: 'event not found' });

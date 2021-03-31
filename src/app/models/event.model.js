@@ -20,7 +20,7 @@ const EventModel = mongoose.model('event', eventSchema);
 
 module.exports = {
     async findEventById(id) {
-        return await EventModel.findById(id);
+        return await EventModel.findById(id).lean();
     },
 
     loadAllEvent(page, limit) {
