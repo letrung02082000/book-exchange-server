@@ -20,7 +20,6 @@ module.exports = {
 
         if (userId) {
             for (let child of post) {
-                let newchild;
                 const { data } = await postLikeModel.findPostLike(
                     child._id,
                     userId

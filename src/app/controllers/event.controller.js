@@ -1,4 +1,5 @@
 const EventModel = require('../models/event.model');
+const eventUserModel = require('../models/event.user.model');
 const UserModel = require('../models/user.model');
 
 module.exports = {
@@ -33,7 +34,30 @@ module.exports = {
     async query(req, res) {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const data = await EventModel.loadAllEvent(page, limit);
+        let data = await EventModel.loadAllEvent(page, limit);
+        const userId = req.headers.id;
+
+        if (userId) {
+            for (let event of data) {
+                const isInEvent = await eventUserModel.checkUserInEvent(
+                    event._id,
+                    userId
+                );
+
+                if (isInEvent) {
+                    event.registered = true;
+                }
+            }
+        } else {
+            for (let event of data) {
+                event.registered = false;
+            }
+        }
+
+        for (let event of data) {
+            const data = await eventUserModel.loadAllUsersByEvent(event._id);
+            event.joinnumber = data.length;
+        }
 
         if (!data || data.length == 0)
             return res.json({ type: 'Invalid', err: 'event not found' });

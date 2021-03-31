@@ -74,4 +74,14 @@ module.exports = {
             .populate('userId')
             .lean();
     },
+
+    async checkUserInEvent(eventId, userId) {
+        const data = await EventUserModel.find({
+            eventId: mongoose.Types.ObjectId(eventId),
+            userId: mongoose.Types.ObjectId(userId),
+        });
+
+        if (data.length > 0) return true;
+        else return false;
+    },
 };

@@ -27,7 +27,8 @@ module.exports = {
         return EventModel.find()
             .sort({ createdate: -1 })
             .skip((page - 1) * limit)
-            .limit(limit);
+            .limit(limit)
+            .lean();
     },
 
     async createEvent(event) {
