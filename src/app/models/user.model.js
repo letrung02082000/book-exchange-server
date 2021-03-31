@@ -48,10 +48,10 @@ module.exports = {
             return { status: 'Fail' };
         }
 
-        data.token = randomstring.generate({
-            length: 30,
-            charset: 'alphabetic',
-        });
+        // data.token = randomstring.generate({
+        //     length: 30,
+        //     charset: 'alphabetic',
+        // });
 
         await data.save();
         data.password = 'hidden';
