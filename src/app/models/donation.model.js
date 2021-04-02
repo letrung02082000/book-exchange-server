@@ -23,6 +23,7 @@ module.exports = {
         });
 
         const err = newDonation.validateSync();
+        await newDonation.save();
 
         if (err) return { err: 'create donation fail' };
         return { data: newDonation };

@@ -12,9 +12,18 @@ module.exports = {
             user: req.headers.id,
         };
 
+        console.log(donation);
+
         const { err, data } = await donationModel.createDonation(donation);
 
         if (err) return res.json({ type: 'Invalid', err });
         if (data) return res.json({ type: 'Valid', data });
+    },
+
+    async getAllDonationsByUser(req, res) {
+        let data = await donationModel.loadAllDonationsByUser(req.headers.id);
+
+        if (data && data.length > 0) return res.json({ type: 'Valid', data });
+        return res.json({ type: 'Invalid', err: 'no donation found' });
     },
 };

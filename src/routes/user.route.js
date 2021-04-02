@@ -19,11 +19,7 @@ router.post(
     userController.getWishList
 );
 
-router.post(
-    '/donation',
-    userauthenticationMiddleware,
-    donationController.requestDonation
-);
+router.post('/donation', donationController.requestDonation);
 
 router.get(
     '/allorders',
@@ -44,6 +40,11 @@ router.get(
     '/joinedevents',
     userauthenticationMiddleware,
     eventUserController.getJoinedEventsByUser
+);
+router.get(
+    '/alldonations',
+    userauthenticationMiddleware,
+    donationController.getAllDonationsByUser
 );
 
 module.exports = router;
