@@ -29,7 +29,6 @@
 
 .all-btn {
     display: flex;
-    
 }
 
 .modal-90w {
@@ -39,4 +38,8 @@
 
 .modal-container {
     width: 100%;
+}
+
+.btn {
+    margin: 15px;
 }

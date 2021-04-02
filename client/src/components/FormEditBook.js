@@ -7,11 +7,9 @@ export default (props) => {
     const [others, setOthers] = useState(props.children.others || []);
     const [newOther, setNewOther] = useState({ key: '', value: '' });
     const [category, setCategory] = useState(null);
-    const [station, setStation] = useState(null);
+    const [station, setStation] = useState('606494f90494e72dbcbee3b9');
 
     useEffect(() => {
-        console.log(props.children.category);
-
         axios
             .get('/api/category/all')
             .then((res) => res.data)
@@ -35,7 +33,7 @@ export default (props) => {
             });
 
         if (props.children.category) {
-            setStation(props.children.category);
+            setCategory(props.children.category._id);
         }
 
         if (props.children.station) {
@@ -65,6 +63,8 @@ export default (props) => {
             station: station,
             others: others,
         };
+
+        console.log(bookInf);
 
         axios
             .post('/api/book/push', {

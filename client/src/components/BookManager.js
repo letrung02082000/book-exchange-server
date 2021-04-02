@@ -149,19 +149,19 @@ export default (props) => {
                 <h2>Quản lí sách</h2>
                 <div className='all-btn'>
                     <Button
-                        className='btn-new-book'
+                        className='btn btn-new-book'
                         onClick={() => setShowedBook({ _id: null })}
                     >
                         Thêm sách
                     </Button>
                     <Button
-                        className='btn-new-category'
+                        className='btn btn-new-category'
                         onClick={() => setShowedCategory(true)}
                     >
                         Thêm Thể loại
                     </Button>
                     <Button
-                        className='btn-new-station'
+                        className='btn btn-new-station'
                         onClick={() => setShowedStation(true)}
                     >
                         Thêm Tủ sách
