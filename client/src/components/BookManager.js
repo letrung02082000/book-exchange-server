@@ -4,6 +4,8 @@ import './BookManager.css';
 import axios from 'axios';
 import FomrEditBook from './FormEditBook';
 import FormAddCategory from './FormAddCategory';
+import FormAddStation from './FormAddStation';
+
 export default (props) => {
     const [page, setPage] = useState(1);
     const [data, setData] = useState([]);
@@ -11,6 +13,7 @@ export default (props) => {
     function setShowInserting(_id = null) {}
     const [showedBook, setShowedBook] = useState(null);
     const [showedCategory, setShowedCategory] = useState(null);
+    const [showedStation, setShowedStation] = useState(null);
 
     useEffect(() => {
         axios
@@ -125,6 +128,23 @@ export default (props) => {
                     )}
                 </Modal.Body>
             </Modal>
+            <Modal
+                show={!!showedStation}
+                onHide={() => setShowedStation(null)}
+                backdrop='static'
+                // keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Thêm tủ sách/điểm đọc</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {showedStation && (
+                        <FormAddStation
+                            handleClose={() => setShowedStation(null)}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
             <div>
                 <h2>Quản lí sách</h2>
                 <div className='all-btn'>
@@ -139,6 +159,12 @@ export default (props) => {
                         onClick={() => setShowedCategory(true)}
                     >
                         Thêm Thể loại
+                    </Button>
+                    <Button
+                        className='btn-new-station'
+                        onClick={() => setShowedStation(true)}
+                    >
+                        Thêm Tủ sách
                     </Button>
                 </div>
             </div>

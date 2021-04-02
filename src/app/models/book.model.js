@@ -12,6 +12,12 @@ const bookSchema = new Schema({
     description: { type: String, default: '' },
     pushtime: { type: Date, required: true },
     others: { type: Array, default: [] },
+    station: {
+        type: Schema.Types.ObjectId,
+        ref: 'station',
+        required: true,
+        default: mongoose.Types.ObjectId('606494f90494e72dbcbee3b9'),
+    },
 
     //author: { type: Schema.Types.ObjectId },
     category: { type: Schema.Types.ObjectId, ref: 'categories' },
@@ -46,7 +52,7 @@ module.exports = {
         return BookModel.find({ sku: bookSku }).populate('category').lean();
     },
 
-    query(page, limit, category, search, quantity, sort) {
+    async query(page, limit, category, search, quantity, sort) {
         const query = [];
         let match = {};
 
@@ -79,7 +85,20 @@ module.exports = {
             });
         }
 
-        return BookModel.aggregate(query);
+        // query.push({
+        //     $lookup: {
+        //         from: 'station',
+        //         localField: '_id',
+        //         foreignField: 'station',
+        //         as: 'station',
+        //     },
+        // });
+
+        const data = await BookModel.aggregate(query);
+        return BookModel.populate(data, [
+            { path: 'station' },
+            { path: 'category' },
+        ]);
     },
 
     removeBookById(_id) {

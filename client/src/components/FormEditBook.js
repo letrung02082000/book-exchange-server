@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Table, Modal, Image } from 'react-bootstrap';
 export default (props) => {
     const [allCategories, setAllCategories] = useState([]);
+    const [allStations, setAllStations] = useState([]);
     const [others, setOthers] = useState(props.children.others || []);
     const [newOther, setNewOther] = useState({ key: '', value: '' });
+    const [category, setCategory] = useState(null);
+    const [station, setStation] = useState(null);
 
     useEffect(() => {
         console.log(props.children.category);
@@ -19,7 +22,34 @@ export default (props) => {
                     setAllCategories([]);
                 }
             });
+
+        axios
+            .get('/api/station/query')
+            .then((res) => res.data)
+            .then((res) => {
+                if (res.type === 'Valid') {
+                    setAllStations(res.data);
+                } else {
+                    setAllStations([]);
+                }
+            });
+
+        if (props.children.category) {
+            setStation(props.children.category);
+        }
+
+        if (props.children.station) {
+            setStation(props.children.station._id);
+        }
     }, []);
+
+    const handleChangeCategory = (e) => {
+        setCategory(e.target.value);
+    };
+
+    const handleChangeStation = (e) => {
+        setStation(e.target.value);
+    };
 
     function handlePushBook(e) {
         e.preventDefault();
@@ -31,7 +61,8 @@ export default (props) => {
             imageurl: document.getElementById('formBasicUrlImage').value,
             description: document.getElementById('formBasicDescription').value,
             quantity: document.getElementById('formBasicQuantity').value || 0,
-            category: document.getElementById('formBasicCategory').value || 0,
+            category: category,
+            station: station,
             others: others,
         };
 
@@ -88,12 +119,27 @@ export default (props) => {
                 <Form.Label>Thể loại</Form.Label>
                 <Form.Control
                     required
-                    value={props.children.category}
+                    value={category}
                     as='select'
                     placeholder='Chọn thể loại'
+                    onChange={handleChangeCategory}
                 >
                     {allCategories.map((child) => (
                         <option value={child._id}>{child.name}</option>
+                    ))}
+                </Form.Control>
+            </Form.Group>
+            <Form.Group controlId='formBasicStation'>
+                <Form.Label>Tủ sách/Điểm đọc</Form.Label>
+                <Form.Control
+                    required
+                    value={station}
+                    as='select'
+                    placeholder='Chọn tủ sách'
+                    onChange={handleChangeStation}
+                >
+                    {allStations.map((child) => (
+                        <option value={child._id}>{child.title}</option>
                     ))}
                 </Form.Control>
             </Form.Group>
