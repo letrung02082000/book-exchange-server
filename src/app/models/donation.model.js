@@ -28,11 +28,28 @@ module.exports = {
         return { data: newDonation };
     },
 
-    async updatePoint(donationId, point) {
+    async confirmDonation(donationId, point) {
         let donation = await DonationModel.findById(donationId);
         donation.point = point;
 
         await donation.save();
         return { data: donation };
+    },
+
+    loadDonationById(donationId) {
+        return DonationModel.findById(donationId).lean();
+    },
+
+    loadAllDonationsByUser(userId) {
+        return DonationModel.find({
+            user: mongoose.Types.ObjectId(userId),
+        }).lean();
+    },
+
+    loadConfirmedDonationsByuser(userId) {
+        return DonationModel.find({
+            user: mongoose.Types.ObjectId(userId),
+            pending: false,
+        }).lean();
     },
 };

@@ -1,3 +1,6 @@
+const donationModel = require('../models/donation.model');
+const eventUserModel = require('../models/event.user.model');
+const orderModel = require('../models/order.model');
 const ReaderModel = require('../models/reader.model');
 const UserModel = require('../models/user.model');
 module.exports.login = async (req, res) => {
@@ -55,6 +58,35 @@ module.exports.getWishList = async (req, res) => {
     if (err) return res.json({ type: 'Invalid', err });
 
     if (data) return res.json({ type: 'Valid', data });
+};
+
+module.exports.getWishList = async (req, res) => {
+    const { data, err } = await UserModel.loadWishList(req.headers.id);
+
+    if (err) return res.json({ type: 'Invalid', err });
+
+    if (data) return res.json({ type: 'Valid', data });
+};
+
+module.exports.getAllDonations = async (req, res) => {
+    const data = await donationModel.loadAllDonationsByUser(req.headers.id);
+
+    if (data && data.length > 0) return res.json({ type: 'Valid', data });
+    return res.json({ type: 'Invalid', err: 'no donation found' });
+};
+
+module.exports.getAllEvents = async (req, res) => {
+    const data = await eventUserModel.loadAllEventsByUser(req.headers.id);
+
+    if (data && data.length > 0) return res.json({ type: 'Valid', data });
+    return res.json({ type: 'Invalid', err: 'no event found' });
+};
+
+module.exports.getAllOrders = async (req, res) => {
+    const data = await orderModel.loadOrdersByUser(req.headers.id);
+
+    if (data && data.length > 0) return res.json({ type: 'Valid', data });
+    return res.json({ type: 'Invalid', err: 'no order found' });
 };
 
 // module.exports.likePost = async function (req, res) {
