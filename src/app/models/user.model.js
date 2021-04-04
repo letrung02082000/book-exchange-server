@@ -39,7 +39,7 @@ module.exports = {
         // }
 
         data = await UserModel.findOne({ email: user.email });
-
+        console.log(data);
         if (!data) {
             return { err: 'user not found' };
         }
