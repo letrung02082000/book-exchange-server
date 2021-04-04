@@ -14,7 +14,12 @@ router.post(
     userController.addToWishList
 );
 router.post(
-    '/getwishlist',
+    '/removefromwishlist',
+    userauthenticationMiddleware,
+    userController.removeFromWishList
+);
+router.get(
+    '/wishlist',
     userauthenticationMiddleware,
     userController.getWishList
 );

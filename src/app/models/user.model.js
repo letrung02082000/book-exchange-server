@@ -131,7 +131,7 @@ module.exports = {
         const data = await user.save();
 
         if (!data) return { err: 'error occured' };
-        return { data };
+        return { data: data.wishlist };
     },
 
     async loadWishList(userId) {
@@ -141,6 +141,18 @@ module.exports = {
 
         if (!data) return { err: 'user not found' };
         return { data };
+    },
+
+    async removeFromWishList(userId, bookId) {
+        const user = await UserModel.findById(userId);
+        if (!user) return { err: 'user not found' };
+
+        let tmp = user.wishlist.filter((child) => child != bookId);
+        user.wishlist = tmp;
+        // console.log(tmp);
+        await user.save();
+
+        return { data: user.wishlist };
     },
 
     // async addToEventList(userId, eventId) {

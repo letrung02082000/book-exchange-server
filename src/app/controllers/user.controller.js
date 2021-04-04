@@ -57,15 +57,20 @@ module.exports.getWishList = async (req, res) => {
 
     if (err) return res.json({ type: 'Invalid', err });
 
-    if (data) return res.json({ type: 'Valid', data });
+    if (data) return res.json({ type: 'Valid', data: data.wishlist });
 };
 
-module.exports.getWishList = async (req, res) => {
-    const { data, err } = await UserModel.loadWishList(req.headers.id);
+module.exports.removeFromWishList = async (req, res) => {
+    if (!req.body.bookId)
+        return res.json({ type: 'Invalid', err: 'bookId required' });
 
-    if (err) return res.json({ type: 'Invalid', err });
+    const { data } = await UserModel.removeFromWishList(
+        req.headers.id,
+        req.body.bookId
+    );
 
     if (data) return res.json({ type: 'Valid', data });
+    return res.json({ type: 'Invalid', err: 'no data' });
 };
 
 module.exports.getAllDonations = async (req, res) => {
