@@ -23,8 +23,17 @@ router.get(
     userauthenticationMiddleware,
     userController.getWishList
 );
-
 router.post('/donation', donationController.requestDonation);
+router.post(
+    '/updateinfo',
+    userauthenticationMiddleware,
+    userController.updateUserInfo
+);
+router.post(
+    '/changeusername',
+    userauthenticationMiddleware,
+    userController.changeUsername
+);
 
 router.get(
     '/allorders',

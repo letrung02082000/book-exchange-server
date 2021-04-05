@@ -3,13 +3,13 @@ const md5 = require('md5');
 const randomstring = require('randomstring');
 
 const bookModel = require('./book.model');
-const ReaderModel = require('./reader.model');
+// const ReaderModel = require('./reader.model');
 
 const userSchema = new mongoose.Schema({
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     token: { type: String },
-    username: { type: String },
+    username: { type: String, unique: true },
     tel: { type: String },
     name: { type: String },
     address: { type: String },
@@ -83,39 +83,6 @@ module.exports = {
         return { data: newuser };
     },
 
-    // async addToLikedPosts(userId, postId) {
-    //     // const post = await ReaderModel.findPostById(postId);
-    //     // if (!post) return { err: 'No post found' };
-
-    //     const user = await UserModel.findById(userId);
-    //     if (!user) return { err: 'user not found' };
-
-    //     if (user.likedposts.includes(mongoose.Types.ObjectId(postId)))
-    //         return { err: 'post liked' };
-
-    //     user.likedposts.push(mongoose.Types.ObjectId(postId));
-    //     const data = await user.save();
-
-    //     if (data) return { data };
-
-    //     return { err: 'error occured' };
-    // },
-
-    // async removeFromLikedPosts(userId, postId) {
-    //     const user = await UserModel.findById(userId);
-    //     if (!user) return { err: 'user not found' };
-
-    //     if (user.likedposts.includes(mongoose.Types.ObjectId(postId))) {
-    //         const tmp = user.likedposts.filter((item) => item != postId);
-    //         user.likedposts = tmp;
-    //         const data = await user.save();
-
-    //         if (data) return { data };
-    //     }
-
-    //     return { err: 'error occured' };
-    // },
-
     async addToWishList(userId, bookId) {
         const user = await UserModel.findById(userId);
         if (!user) return { err: 'user not found' };
@@ -154,6 +121,74 @@ module.exports = {
 
         return { data: user.wishlist };
     },
+
+    async updateUserInfo(userId, name, tel, address) {
+        let user = await UserModel.findById(userId);
+
+        if (!user) return { err: 'user not found' };
+
+        user.name = name;
+        user.tel = tel;
+        user.address = address;
+
+        let error = user.validateSync();
+
+        if (error) return { err: 'validate fail' };
+
+        await user.save();
+        return { data: user };
+    },
+
+    async updateUsername(userId, username) {
+        let oldUser = await UserModel.findById(userId);
+        if (oldUser.username && oldUser.username.trim().length > 0)
+            return { err: 'cannot change username' };
+
+        let otherUser = await UserModel.exists({ username: username });
+        // console.log(otherUser);
+        if (otherUser) return { err: 'username exist' };
+
+        oldUser.username = username;
+        let err = oldUser.validateSync();
+
+        if (err) return { err: 'validate fail' };
+
+        await oldUser.save();
+        return { data: oldUser };
+    },
+
+    // async addToLikedPosts(userId, postId) {
+    //     // const post = await ReaderModel.findPostById(postId);
+    //     // if (!post) return { err: 'No post found' };
+
+    //     const user = await UserModel.findById(userId);
+    //     if (!user) return { err: 'user not found' };
+
+    //     if (user.likedposts.includes(mongoose.Types.ObjectId(postId)))
+    //         return { err: 'post liked' };
+
+    //     user.likedposts.push(mongoose.Types.ObjectId(postId));
+    //     const data = await user.save();
+
+    //     if (data) return { data };
+
+    //     return { err: 'error occured' };
+    // },
+
+    // async removeFromLikedPosts(userId, postId) {
+    //     const user = await UserModel.findById(userId);
+    //     if (!user) return { err: 'user not found' };
+
+    //     if (user.likedposts.includes(mongoose.Types.ObjectId(postId))) {
+    //         const tmp = user.likedposts.filter((item) => item != postId);
+    //         user.likedposts = tmp;
+    //         const data = await user.save();
+
+    //         if (data) return { data };
+    //     }
+
+    //     return { err: 'error occured' };
+    // },
 
     // async addToEventList(userId, eventId) {
     //     const user = UserModel.findById(userId);

@@ -94,6 +94,35 @@ module.exports.getAllOrders = async (req, res) => {
     return res.json({ type: 'Invalid', err: 'no order found' });
 };
 
+module.exports.updateUserInfo = async (req, res) => {
+    const name = req.body.name || '';
+    const tel = req.body.tel || '';
+    const address = req.body.address || '';
+
+    const { err, data } = await UserModel.updateUserInfo(
+        req.headers.id,
+        name,
+        tel,
+        address
+    );
+
+    if (err) return res.json({ type: 'Invalid', err });
+    return res.json({ type: 'Valid', data });
+};
+
+module.exports.changeUsername = async (req, res) => {
+    if (!req.body.username)
+        return res.json({ type: 'Valid', err: 'username required' });
+
+    const { err, data } = await UserModel.updateUsername(
+        req.headers.id,
+        req.body.username
+    );
+
+    if (err) return res.json({ type: 'Invalid', err });
+    return res.json({ type: 'Valid', data });
+};
+
 // module.exports.likePost = async function (req, res) {
 //     const { postId } = req.body;
 //     console.log(postId);
