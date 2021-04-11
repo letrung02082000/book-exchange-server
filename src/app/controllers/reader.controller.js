@@ -48,8 +48,8 @@ module.exports = {
         const post = {
             book: mongoose.Types.ObjectId(req.body.book),
             user: mongoose.Types.ObjectId(req.body.user),
-            content: req.body.content,
-            title: req.body.title,
+            content: req.body.content || null,
+            title: req.body.title || null,
         };
         const { data, err } = await ReaderModel.createPost(post);
 

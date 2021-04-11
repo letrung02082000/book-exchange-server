@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const UserModel = require('./user.model');
 const Schema = mongoose.Schema;
 
 const readerSchema = new Schema({
@@ -8,8 +7,8 @@ const readerSchema = new Schema({
     pending: { type: Boolean, default: false },
     date: { type: Date, default: Date.now },
     // likelist: [{ type: Schema.Types.ObjectId }],
-    title: { type: String, require: true },
-    content: { type: String, require: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
 });
 
 const ReaderModel = mongoose.model('reader', readerSchema);
@@ -40,10 +39,13 @@ module.exports = {
     },
 
     async createPost(post) {
-        const data = await ReaderModel.create(post);
+        let newPost = new ReaderModel(post);
+        let err = newPost.validateSync();
+        console.log(err);
+        if (err) return { err: 'create post fail' };
 
-        if (data) return { data };
-        return { err: 'create post fail' };
+        await newPost.save();
+        return { data: newPost };
     },
 
     // async addToLikeList(userId, postId) {
