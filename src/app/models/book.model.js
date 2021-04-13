@@ -23,7 +23,7 @@ const bookSchema = new Schema({
     category: { type: Schema.Types.ObjectId, ref: 'categories' },
 
     buyCount: { type: Number, default: 0 },
-    buyCount: { type: Number, default: 0 },
+    favorite: { type: Number, default: 0 },
 });
 bookSchema.index({ '$**': 'text' });
 
