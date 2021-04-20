@@ -47,7 +47,7 @@ module.exports = {
     async addPost(req, res) {
         const post = {
             book: mongoose.Types.ObjectId(req.body.book),
-            user: mongoose.Types.ObjectId(req.body.user),
+            user: mongoose.Types.ObjectId(req.headers.id),
             content: req.body.content || null,
             title: req.body.title || null,
         };

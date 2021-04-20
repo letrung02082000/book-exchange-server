@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const donationSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+    user: { type: Schema.Types.ObjectId, ref: 'user' },
     pending: { type: Boolean, required: true, default: true },
     tel: { type: String, required: true },
     address: { type: String, required: true },
