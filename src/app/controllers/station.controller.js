@@ -35,9 +35,14 @@ module.exports = {
     },
 
     async addStation(req, res) {
-        const { latitude, longitude, address, title, description } = req.body;
-        if (!latitude || !longitude || !address || !title)
-            return res.json({ type: 'Invalid', err: 'fill all fields' });
+        const {
+            latitude,
+            longitude,
+            address,
+            title,
+            description,
+            imgurl,
+        } = req.body;
 
         const station = {
             latitude,
@@ -45,6 +50,7 @@ module.exports = {
             address,
             title,
             description: description || '',
+            imgurl,
         };
         const { err, data } = await stationModel.addStation(station);
 

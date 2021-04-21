@@ -8,6 +8,7 @@ const stationSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String, default: '' },
     type: { type: Number, required: true, default: 1 }, // 1: bookcase, 2: read station
+    imgurl: { type: String, required: true },
 });
 
 const StationModel = mongoose.model('station', stationSchema);
