@@ -46,6 +46,11 @@ router.get(
     orderController.getConfirmedOrders
 );
 router.get(
+    '/pendingorders',
+    userauthenticationMiddleware,
+    orderController.getPendingOrders
+);
+router.get(
     '/allevents',
     userauthenticationMiddleware,
     eventUserController.getAllEventsByUser

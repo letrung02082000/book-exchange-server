@@ -32,14 +32,27 @@ module.exports = {
     loadOrdersByUser(userId) {
         return OrderModel.find({
             user: mongoose.Types.ObjectId(userId),
-        }).lean();
+        })
+            .populate('bookList')
+            .lean();
     },
 
     loadConfirmedOrdersByUser(userId) {
         return OrderModel.find({
             user: mongoose.Types.ObjectId(userId),
             pending: false,
-        }).lean();
+        })
+            .populate('bookList')
+            .lean();
+    },
+
+    loadPendingOrdersByUser(userId) {
+        return OrderModel.find({
+            user: mongoose.Types.ObjectId(userId),
+            pending: true,
+        })
+            .populate('bookList')
+            .lean();
     },
 
     async createOrder(order) {

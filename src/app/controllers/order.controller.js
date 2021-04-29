@@ -15,6 +15,13 @@ module.exports = {
         return res.json({ type: 'Invalid', err: 'order not found' });
     },
 
+    async getPendingOrders(req, res) {
+        const data = await orderModel.loadPendingOrdersByUser(req.headers.id);
+
+        if (data && data.length > 0) return res.json({ type: 'Valid', data });
+        return res.json({ type: 'Invalid', err: 'order not found' });
+    },
+
     async createOrder(req, res) {
         console.log(req.body);
         if (!req.body.bookList) {
