@@ -3,6 +3,7 @@ const eventUserModel = require('../models/event.user.model');
 const orderModel = require('../models/order.model');
 const ReaderModel = require('../models/reader.model');
 const UserModel = require('../models/user.model');
+const voucherUserModel = require('../models/voucher.user.model');
 module.exports.login = async (req, res) => {
     console.log(req.body);
     if (!req.body.password) {
@@ -121,6 +122,13 @@ module.exports.changeUsername = async (req, res) => {
 
     if (err) return res.json({ type: 'Invalid', err });
     return res.json({ type: 'Valid', data });
+};
+
+module.exports.getAllVouchers = async (req, res) => {
+    const data = await voucherUserModel.loadVoucherByUser(req.headers.id);
+    console.log(data);
+    if (data.length > 0) return res.json({ type: 'Valid', data });
+    return { type: 'Invalid', err: 'no voucher' };
 };
 
 // module.exports.likePost = async function (req, res) {

@@ -65,5 +65,10 @@ router.get(
     userauthenticationMiddleware,
     donationController.getAllDonationsByUser
 );
+router.get(
+    '/allvouchers',
+    userauthenticationMiddleware,
+    userController.getAllVouchers
+);
 
 module.exports = router;

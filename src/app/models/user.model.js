@@ -31,6 +31,10 @@ module.exports = {
         return await UserModel.findById(id);
     },
 
+    loadAllUsers() {
+        return UserModel.find({}).lean();
+    },
+
     async loginUser(user) {
         let data;
 

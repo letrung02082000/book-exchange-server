@@ -8,6 +8,7 @@ const categoryRoute = require('./category.route');
 const postRoute = require('./post.route');
 const eventRoute = require('./event.route');
 const stationRoute = require('./station.route');
+const voucherRoute = require('./voucher.route');
 
 router.use('/user', userRoute);
 router.use('/category', categoryRoute);
@@ -17,5 +18,6 @@ router.use('/admin', adminRoute);
 router.use('/post', postRoute);
 router.use('/event', eventRoute);
 router.use('/station', stationRoute);
+router.use('/voucher', voucherRoute);
 
 module.exports = router;
