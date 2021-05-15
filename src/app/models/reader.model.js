@@ -29,7 +29,7 @@ module.exports = {
     },
 
     loadPostsByBookId(page, limit, bookId) {
-        return ReaderModel.find()
+        return ReaderModel.find({ book: mongoose.Types.ObjectId(bookId) })
             .populate({ path: 'user', select: ['avt', 'username', 'name'] })
             .sort({ date: -1 })
             .populate('book')
