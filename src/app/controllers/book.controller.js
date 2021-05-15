@@ -1,3 +1,4 @@
+const { post } = require('../../routes/post.route');
 const { removeBookById, updateBookById } = require('../models/book.model');
 const bookModel = require('../models/book.model');
 const readerModel = require('../models/reader.model');
@@ -131,7 +132,11 @@ module.exports = {
         const limit = parseInt(req.query.limit) || 10;
         const posts = await readerModel.loadPostsByBookId(page, limit, bookId);
 
-        if (posts) return res.json({ type: 'Valid', data: posts });
+        if (post.length == 0)
+            return res.json({ type: 'Invalid', err: 'endoflist' });
+
+        if (posts.length > 0) return res.json({ type: 'Valid', data: posts });
+
         return res.json({ type: 'Invalid', err: 'error occured' });
     },
 };

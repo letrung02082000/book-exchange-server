@@ -21,18 +21,18 @@ module.exports = {
     loadAllPosts(page, limit) {
         return ReaderModel.find()
             .populate({ path: 'user', select: ['avt', 'name', 'username'] })
-            .populate('book')
             .sort({ date: -1 })
+            .populate('book')
             .skip((page - 1) * limit)
             .limit(limit)
             .lean();
     },
 
     loadPostsByBookId(page, limit, bookId) {
-        return ReaderModel.find({ book: bookId })
+        return ReaderModel.find()
             .populate({ path: 'user', select: ['avt', 'username', 'name'] })
-            .populate('book')
             .sort({ date: -1 })
+            .populate('book')
             .skip((page - 1) * limit)
             .limit(limit)
             .lean();
