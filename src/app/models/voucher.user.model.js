@@ -56,4 +56,6 @@ module.exports = {
             user: mongoose.Types.ObjectId(userId),
         }).populate('voucher');
     },
+
+    async removeVoucherUser(voucherId, userId) {},
 };
