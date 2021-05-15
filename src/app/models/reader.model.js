@@ -6,9 +6,9 @@ const readerSchema = new Schema({
     book: { type: Schema.Types.ObjectId, required: true, ref: 'book' },
     pending: { type: Boolean, default: false },
     date: { type: Date, default: Date.now },
-    // likelist: [{ type: Schema.Types.ObjectId }],
     title: { type: String, required: true },
     content: { type: String, required: true },
+    rating: { type: Number, required: true },
 });
 
 const ReaderModel = mongoose.model('reader', readerSchema);
@@ -20,7 +20,7 @@ module.exports = {
 
     loadAllPosts(page, limit) {
         return ReaderModel.find()
-            .populate({ path: 'user', select: ['avt', 'name'] })
+            .populate({ path: 'user', select: ['avt', 'name', 'username'] })
             .populate('book')
             .sort({ date: -1 })
             .skip((page - 1) * limit)
@@ -42,7 +42,7 @@ module.exports = {
         let newPost = new ReaderModel(post);
         let err = newPost.validateSync();
         console.log(err);
-        if (err) return { err: 'create post fail' };
+        if (err) return { err: 'validate error' };
 
         await newPost.save();
         return { data: newPost };

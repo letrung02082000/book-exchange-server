@@ -45,12 +45,20 @@ module.exports = {
     },
 
     async addPost(req, res) {
+        const rating = parseInt(req.body.rating);
+
+        if (rating < 1 || rating > 5) {
+            res.json({ type: 'Invalid', err: 'invalid rating' });
+        }
+
         const post = {
             book: mongoose.Types.ObjectId(req.body.book),
             user: mongoose.Types.ObjectId(req.headers.id),
             content: req.body.content || null,
             title: req.body.title || null,
+            rating: rating,
         };
+
         const { data, err } = await ReaderModel.createPost(post);
 
         if (data) return res.json({ type: 'Valid', data });
