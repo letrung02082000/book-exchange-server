@@ -48,7 +48,7 @@ module.exports = {
         const rating = parseInt(req.body.rating);
 
         if (rating < 1 || rating > 5) {
-            res.json({ type: 'Invalid', err: 'invalid rating' });
+            return res.json({ type: 'Invalid', err: 'invalid rating' });
         }
 
         const post = {

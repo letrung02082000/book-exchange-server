@@ -39,9 +39,17 @@ module.exports = {
     },
 
     async createPost(post) {
+        const checkPost = await ReaderModel.find({
+            user: post.user,
+            book: post.book,
+        });
+
+        if (checkPost.length > 0) return { err: 'post exist' };
+
         let newPost = new ReaderModel(post);
         let err = newPost.validateSync();
         console.log(err);
+
         if (err) return { err: 'validate error' };
 
         await newPost.save();
