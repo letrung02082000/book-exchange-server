@@ -18,6 +18,26 @@ module.exports = {
         return await ReaderModel.findById(id);
     },
 
+    loadPostsByUser(userId, limit, page) {
+        return ReaderModel.find({ user: mongoose.Types.ObjectId(userId) })
+            .populate({ path: 'user', select: ['avt', 'name', 'username'] })
+            .sort({ date: -1 })
+            .populate('book')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean();
+    },
+
+    loadUserPostByBook(userId, bookId) {
+        return ReaderModel.findOne({
+            user: mongoose.Types.ObjectId(userId),
+            book: mongoose.Types.ObjectId(bookId),
+        })
+            .populate({ path: 'user', select: ['avt', 'name', 'username'] })
+            .populate('book')
+            .lean();
+    },
+
     loadAllPosts(page, limit) {
         return ReaderModel.find()
             .populate({ path: 'user', select: ['avt', 'name', 'username'] })

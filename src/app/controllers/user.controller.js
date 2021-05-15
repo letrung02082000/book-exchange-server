@@ -1,6 +1,7 @@
 const donationModel = require('../models/donation.model');
 const eventUserModel = require('../models/event.user.model');
 const orderModel = require('../models/order.model');
+const readerModel = require('../models/reader.model');
 const ReaderModel = require('../models/reader.model');
 const UserModel = require('../models/user.model');
 const voucherUserModel = require('../models/voucher.user.model');
@@ -129,6 +130,27 @@ module.exports.getAllVouchers = async (req, res) => {
     console.log(data);
     if (data.length > 0) return res.json({ type: 'Valid', data });
     return { type: 'Invalid', err: 'no voucher' };
+};
+
+module.exports.getAllReviews = async (req, res) => {
+    const data = await readerModel.loadPostsByUser(
+        req.headers.id,
+        req.query.limit,
+        req.query.page
+    );
+    console.log(data);
+    if (data.length > 0) return res.json({ type: 'Valid', data: data });
+    return { type: 'Invalid', err: 'no review' };
+};
+
+module.exports.getBookReview = async (req, res) => {
+    const data = await readerModel.loadUserPostByBook(
+        req.headers.id,
+        req.params.id
+    );
+    console.log(data);
+    if (data) return res.json({ type: 'Valid', data });
+    return res.json({ type: 'Invalid', err: 'no review' });
 };
 
 // module.exports.likePost = async function (req, res) {

@@ -2,6 +2,7 @@ const express = require('express');
 const donationController = require('../app/controllers/donation.controller.js');
 const eventUserController = require('../app/controllers/event.user.controller.js');
 const orderController = require('../app/controllers/order.controller.js');
+const readerController = require('../app/controllers/reader.controller.js');
 const router = express.Router();
 const userController = require('../app/controllers/user.controller.js');
 const userauthenticationMiddleware = require('../app/middleware/userauthentication.middleware.js');
@@ -69,6 +70,16 @@ router.get(
     '/allvouchers',
     userauthenticationMiddleware,
     userController.getAllVouchers
+);
+router.get(
+    '/allreviews',
+    userauthenticationMiddleware,
+    userController.getAllReviews
+);
+router.get(
+    '/review/:id',
+    userauthenticationMiddleware,
+    userController.getBookReview
 );
 
 module.exports = router;
