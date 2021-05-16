@@ -1,4 +1,5 @@
 const orderModel = require('../models/order.model');
+const mongoose = require('mongoose');
 
 module.exports = {
     async getAllOrders(req, res) {
@@ -23,14 +24,19 @@ module.exports = {
     },
 
     async createOrder(req, res) {
-        console.log(req.body);
         if (!req.body.bookList) {
             return res.json({
                 type: 'Invalid',
             });
         }
 
-        const { data, err } = await orderModel.createOrder(req.body);
+        let order = req.body;
+
+        if (req.headers.id) {
+            order.user = mongoose.Types.ObjectId(req.headers.id);
+        }
+
+        const { data, err } = await orderModel.createOrder(order);
 
         if (err) {
             return res.json({

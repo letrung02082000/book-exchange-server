@@ -56,7 +56,6 @@ module.exports = {
     },
 
     async createOrder(order) {
-        let newOrder;
         const orderid = require('order-id')('khoa-don-hang');
         const id = orderid.generate();
         const checkOrderId = await OrderModel.find({ orderId: id.toString() });
@@ -88,27 +87,17 @@ module.exports = {
             order.orderId = id;
             order['orderDate'] = new Date();
 
-            await OrderModel.create(order);
+            const newOrder = new OrderModel(order);
+            const err = newOrder.validateSync();
+
+            if (err) return { err: 'validate err' };
+
+            await newOrder.save();
             return {
                 data: order,
             };
         } catch (error) {
             return { err: error };
         }
-
-        // let error = newOrder.validateSync();
-
-        // console.log(error);
-
-        // if (!error) {
-        //     await newOrder.save();
-        //     return {
-        //         data: newOrder,
-        //     };
-        // }
-
-        // return {
-        //     err: 'validate sync fail',
-        // };
     },
 };
