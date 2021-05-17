@@ -7,7 +7,7 @@ const orderSchema = new Schema({
     orderId: { type: String, required: true },
     bookList: [
         {
-            bookId: {
+            book: {
                 type: Schema.Types.ObjectId,
                 ref: 'book',
                 required: true,
@@ -33,7 +33,7 @@ module.exports = {
         return OrderModel.find({
             user: mongoose.Types.ObjectId(userId),
         })
-            .populate('bookList')
+            .populate('bookList.book')
             .lean();
     },
 
@@ -42,7 +42,7 @@ module.exports = {
             user: mongoose.Types.ObjectId(userId),
             pending: false,
         })
-            .populate('bookList')
+            .populate('bookList.book')
             .lean();
     },
 
@@ -51,7 +51,7 @@ module.exports = {
             user: mongoose.Types.ObjectId(userId),
             pending: true,
         })
-            .populate('bookList')
+            .populate('bookList.book')
             .lean();
     },
 
