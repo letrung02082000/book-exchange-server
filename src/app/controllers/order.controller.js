@@ -34,6 +34,8 @@ module.exports = {
 
         if (req.headers.id) {
             order.user = mongoose.Types.ObjectId(req.headers.id);
+        } else {
+            order.user = null;
         }
 
         const { data, err } = await orderModel.createOrder(order);
