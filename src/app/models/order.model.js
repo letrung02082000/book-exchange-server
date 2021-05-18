@@ -90,7 +90,7 @@ module.exports = {
             const newOrder = new OrderModel(order);
             const err = newOrder.validateSync();
 
-            if (err) return { err };
+            if (err) return { err: 'validate err' };
 
             await newOrder.save();
             return {
