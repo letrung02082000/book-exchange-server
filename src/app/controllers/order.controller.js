@@ -24,13 +24,21 @@ module.exports = {
     },
 
     async createOrder(req, res) {
-        if (!req.body.bookList) {
+        if (!req.body.bookList || req.body.bookList.length <= 0) {
             return res.json({
                 type: 'Invalid',
+                err: 'no book',
             });
         }
 
-        let order = req.body;
+        let order = {
+            bookList: req.body.bookList,
+            pending: true,
+            tel: req.body.tel,
+            address: req.body.address,
+            shipping: req.body.shipping,
+            payment: req.body.payment,
+        };
 
         if (req.headers.id) {
             order.user = mongoose.Types.ObjectId(req.headers.id);

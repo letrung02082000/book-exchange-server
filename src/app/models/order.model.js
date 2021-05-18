@@ -64,40 +64,39 @@ module.exports = {
             return { err: 'order id existed' };
         }
 
-        try {
-            let total = 0;
+        let total = 0;
 
-            for (let child of order.bookList) {
-                const book = await BookModel.loadBookById(child.bookId);
-                const newQuantity = book.quantity - child.quantity;
+        for (let child of order.bookList) {
+            console.log(child);
+            const book = await BookModel.loadBookById(
+                mongoose.Types.ObjectId(child.book)
+            );
+            const newQuantity = book.quantity - child.quantity;
 
-                if (newQuantity < 0) {
-                    return {
-                        err: 'Không đủ số lượng sách trong kho',
-                    };
-                } else {
-                    await BookModel.updateQuantity(book._id, newQuantity);
-                }
-                total += book.newprice * child.quantity;
+            if (newQuantity < 0) {
+                return {
+                    err: 'Không đủ số lượng sách trong kho',
+                };
+            } else {
+                await BookModel.updateQuantity(book._id, newQuantity);
             }
-
-            console.log(total);
-            order.total = total;
-            order.point = total / 10000;
-            order.orderId = id;
-            order['orderDate'] = new Date();
-
-            const newOrder = new OrderModel(order);
-            const err = newOrder.validateSync();
-
-            if (err) return { err: err };
-
-            await newOrder.save();
-            return {
-                data: order,
-            };
-        } catch (error) {
-            return { err: error };
+            total += book.newprice * child.quantity;
         }
+
+        console.log(total);
+        order.total = total;
+        order.point = total / 10000;
+        order.orderId = id;
+        order['orderDate'] = new Date();
+
+        const newOrder = new OrderModel(order);
+        const err = newOrder.validateSync();
+        console.log('err');
+        if (err) return { err: err };
+
+        await newOrder.save();
+        return {
+            data: order,
+        };
     },
 };
