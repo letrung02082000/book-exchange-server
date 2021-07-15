@@ -17,6 +17,7 @@ const orderSchema = new Schema({
     ],
     user: { type: Schema.Types.ObjectId, ref: 'user', default: null },
     pending: { type: Boolean, default: true },
+    success: { type: Boolean, default: false },
     orderDate: { type: Date, default: Date.now },
     tel: { type: String, required: true },
     address: { type: String, default: null },
@@ -29,6 +30,31 @@ const orderSchema = new Schema({
 const OrderModel = mongoose.model('order', orderSchema);
 
 module.exports = {
+    queryOrders(page, limit) {
+        return OrderModel.find({})
+            .populate('bookList.book')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort({ orderDate: -1 })
+            .lean();
+    },
+
+    async updateOrderStatus(id, status) {
+        // status = 0: success
+        let order = await OrderModel.findById(mongoose.Types.ObjectId(id));
+
+        if (status == 0) {
+            order.success = true;
+        } else {
+            order.success = false;
+        }
+
+        order.pending = false;
+        await order.save();
+
+        return true;
+    },
+
     loadOrdersByUser(userId) {
         return OrderModel.find({
             user: mongoose.Types.ObjectId(userId),

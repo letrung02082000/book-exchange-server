@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Table, Modal, Image } from 'react-bootstrap';
+
+import './FormEditBook.css';
+
 export default (props) => {
     const [allCategories, setAllCategories] = useState([]);
     const [allStations, setAllStations] = useState([]);
@@ -182,7 +185,7 @@ export default (props) => {
                     // type="url"
                     placeholder='Nhập đường dẫn hình ảnh'
                 />
-                <Image src={props.children.imageurl} />
+                <Image className='book-image' src={props.children.imageurl} />
             </Form.Group>
             <Form.Group controlId='formBasicDescription'>
                 <Form.Label>Mô tả</Form.Label>

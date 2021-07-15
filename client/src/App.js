@@ -1,21 +1,22 @@
-import logo from "./logo.svg";
-import "./App.css";
-import LoginForm from "./components/LoginForm";
-import { Modal, Button } from "react-bootstrap";
+import './App.css';
+import LoginForm from './components/LoginForm';
+import { Modal, Navbar, Container, Nav } from 'react-bootstrap';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import "bootstrap/dist/css/bootstrap.css";
-import BookManager from "./components/BookManager";
-import { useState, useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.css';
+import BookManager from './components/BookManager';
+import OrderManagement from './components/OrderManagement';
+import { useState, useEffect } from 'react';
 function App() {
-    console.log(document.cookie.split(";"));
+    console.log(document.cookie.split(';'));
     function checkLogined() {
         let output = {};
         document.cookie.split(/\s*;\s*/).forEach(function (pair) {
             pair = pair.split(/\s*=\s*/);
-            output[pair[0]] = pair.splice(1).join("=");
+            output[pair[0]] = pair.splice(1).join('=');
         });
 
-        return !!output["admin"];
+        return !!output['admin'];
     }
     useEffect(() => {
         if (!checkLogined()) handleShow();
@@ -25,11 +26,31 @@ function App() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     return (
-        <div className="App">
-            <Modal
+        <div className='App'>
+            <Router>
+                <Navbar bg='light' expand='lg'>
+                    <Container>
+                        <Navbar.Brand href='#home'>
+                            <img alt='logo' src='/logo.png' className='logo' />
+                        </Navbar.Brand>
+                        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+                        <Navbar.Collapse id='basic-navbar-nav'>
+                            <Nav className='me-auto'>
+                                <Nav.Link as={Link} to='/'>
+                                    Quản lý sách
+                                </Nav.Link>
+                                <Nav.Link as={Link} to='/order'>
+                                    Đơn đặt sách
+                                </Nav.Link>
+                                <Nav.Link href='#link'>Thể loại</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+                {/* <Modal
                 show={show}
                 // onHide={handleClose}
-                backdrop="static"
+                backdrop='static'
                 keyboard={false}
             >
                 <Modal.Header>
@@ -38,8 +59,19 @@ function App() {
                 <Modal.Body>
                     <LoginForm handleClose={handleClose} />
                 </Modal.Body>
-            </Modal>
-            <BookManager />
+            </Modal> */}
+
+                <Switch>
+                    <Route path='/order'>
+                        <OrderManagement />
+                    </Route>
+                    <Route path='/'>
+                        <BookManager />
+                    </Route>
+                    {/* <Route path='/category'>
+                </Route> */}
+                </Switch>
+            </Router>
         </div>
     );
 }

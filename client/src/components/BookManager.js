@@ -228,7 +228,7 @@ export default (props) => {
                                         Sửa
                                     </Button>
 
-                                    <Button
+                                    {/* <Button
                                         style={{ zIndex: 1 }}
                                         onClick={() => {
                                             setDialog({
@@ -259,7 +259,7 @@ export default (props) => {
                                         variant='danger'
                                     >
                                         Xóa
-                                    </Button>
+                                    </Button> */}
                                 </td>
                             </tr>
                         ))
