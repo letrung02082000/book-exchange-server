@@ -43,7 +43,7 @@ function OrderManagement() {
     };
 
     const goToPreviousPage = () => {
-        if (page <= 0) return;
+        if (page <= 1) return;
         setPage(page - 1);
     };
 
@@ -129,9 +129,9 @@ function OrderManagement() {
                 refreshPage={refreshPage}
             />
             <div className='paging'>
-                <Button onClick={() => setPage(0)}>Về đầu trang</Button>
+                <Button onClick={() => setPage(1)}>Về đầu trang</Button>
                 <Button onClick={goToPreviousPage}>Trước đó</Button>
-                <p style={{ display: 'inline-block' }}>Trang {page + 1}</p>
+                <p style={{ display: 'inline-block' }}>Trang {page}</p>
                 <Button onClick={() => setPage(page + 1)}>Kế tiếp</Button>
             </div>
         </div>
