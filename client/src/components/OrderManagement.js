@@ -42,6 +42,11 @@ function OrderManagement() {
         setShow(false);
     };
 
+    const goToPreviousPage = () => {
+        if (page <= 0) return;
+        setPage(page - 1);
+    };
+
     return (
         <div className='container'>
             <h2>Đơn đặt sách</h2>
@@ -66,47 +71,55 @@ function OrderManagement() {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((child, index) => {
-                        return (
-                            <tr key={child._id}>
-                                <td>{index + 1}</td>
-                                <td>{child.orderId}</td>
-                                <td>{child.orderDate}</td>
-                                <td>
-                                    {child.user.name}
-                                    <br />
-                                    {child.tel}
-                                    <br />
-                                    {child.address}
-                                </td>
-                                <td>
-                                    {child.shipping
-                                        ? 'Giao hàng tận nơi'
-                                        : 'Lấy tại tủ sách'}
-                                    <br />
-                                    {child.payment
-                                        ? 'Thanh toán trực tiếp'
-                                        : 'Thanh toán bằng Momo'}
-                                </td>
-                                <td>
-                                    {child.pending
-                                        ? 'Chưa xử lý'
-                                        : child.success
-                                        ? 'Thành công'
-                                        : 'Đã hủy'}
-                                </td>
-                                <td>{child.total}</td>
-                                <td>
-                                    <Button
-                                        variant='success'
-                                        onClick={() => handleSeeDetail(child)}
-                                    >
-                                        Xem chi tiết
-                                    </Button>
-                                </td>
-                            </tr>
-                        );
-                    })}
+                    {data.length == 0 ? (
+                        <p>Không có dữ liệu</p>
+                    ) : (
+                        <>
+                            {data.map((child, index) => {
+                                return (
+                                    <tr key={child._id}>
+                                        <td>{index + 1}</td>
+                                        <td>{child.orderId}</td>
+                                        <td>{child.orderDate}</td>
+                                        <td>
+                                            {child.user.name}
+                                            <br />
+                                            {child.tel}
+                                            <br />
+                                            {child.address}
+                                        </td>
+                                        <td>
+                                            {child.shipping
+                                                ? 'Giao hàng tận nơi'
+                                                : 'Lấy tại tủ sách'}
+                                            <br />
+                                            {child.payment
+                                                ? 'Thanh toán trực tiếp'
+                                                : 'Thanh toán bằng Momo'}
+                                        </td>
+                                        <td>
+                                            {child.pending
+                                                ? 'Chưa xử lý'
+                                                : child.success
+                                                ? 'Thành công'
+                                                : 'Đã hủy'}
+                                        </td>
+                                        <td>{child.total}</td>
+                                        <td>
+                                            <Button
+                                                variant='success'
+                                                onClick={() =>
+                                                    handleSeeDetail(child)
+                                                }
+                                            >
+                                                Xem chi tiết
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </>
+                    )}
                 </tbody>
             </Table>
             <OrderDetail
@@ -115,6 +128,12 @@ function OrderManagement() {
                 handleClose={handleClose}
                 refreshPage={refreshPage}
             />
+            <div className='paging'>
+                <Button onClick={() => setPage(0)}>Về đầu trang</Button>
+                <Button onClick={goToPreviousPage}>Trước đó</Button>
+                <p style={{ display: 'inline-block' }}>Trang {page + 1}</p>
+                <Button onClick={() => setPage(page + 1)}>Kế tiếp</Button>
+            </div>
         </div>
     );
 }
