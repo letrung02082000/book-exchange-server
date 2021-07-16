@@ -22,6 +22,17 @@ function OrderManagement() {
             });
     }, [page]);
 
+    const refreshPage = (order) => {
+        axios
+            .get('/api/order', { params: { page: page, limit: 10 } })
+            .then((res) => res.data)
+            .then((res) => {
+                if (res.type == 'Valid') {
+                    setData(res.data);
+                }
+            });
+    };
+
     const handleSeeDetail = (order) => {
         setShow(true);
         setOrder(order);
@@ -50,17 +61,20 @@ function OrderManagement() {
                         <th>Thông tin người đặt</th>
                         <th>Thông tin đơn hàng</th>
                         <th>Tình trạng</th>
+                        <th>Tổng tiền</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((child, index) => {
                         return (
-                            <tr>
+                            <tr key={child._id}>
                                 <td>{index + 1}</td>
                                 <td>{child.orderId}</td>
                                 <td>{child.orderDate}</td>
                                 <td>
+                                    {child.user.name}
+                                    <br />
                                     {child.tel}
                                     <br />
                                     {child.address}
@@ -81,6 +95,7 @@ function OrderManagement() {
                                         ? 'Thành công'
                                         : 'Đã hủy'}
                                 </td>
+                                <td>{child.total}</td>
                                 <td>
                                     <Button
                                         variant='success'
@@ -94,7 +109,12 @@ function OrderManagement() {
                     })}
                 </tbody>
             </Table>
-            <OrderDetail order={order} show={show} handleClose={handleClose} />
+            <OrderDetail
+                order={order}
+                show={show}
+                handleClose={handleClose}
+                refreshPage={refreshPage}
+            />
         </div>
     );
 }

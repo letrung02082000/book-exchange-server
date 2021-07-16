@@ -147,4 +147,10 @@ module.exports = {
         book.quantity = newQuantity;
         await book.save();
     },
+
+    async increaseQuantity(bookId, value) {
+        let book = await BookModel.findById(mongoose.Types.ObjectId(bookId));
+        book.quantity += value;
+        await book.save();
+    },
 };

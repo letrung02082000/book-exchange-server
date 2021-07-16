@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 module.exports = {
     async queryOrders(req, res) {
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 1;
+        const limit = parseInt(req.query.limit) || 10;
 
         const data = await orderModel.queryOrders(page, limit);
 

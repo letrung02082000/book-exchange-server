@@ -33,6 +33,7 @@ module.exports = {
     queryOrders(page, limit) {
         return OrderModel.find({})
             .populate('bookList.book')
+            .populate('user', 'name')
             .skip((page - 1) * limit)
             .limit(limit)
             .sort({ orderDate: -1 })
@@ -45,9 +46,12 @@ module.exports = {
 
         if (status == 0) {
             order.success = true;
-        } else {
+        } else if (status == 1) {
             order.success = false;
-        }
+            for (let child of order.bookList) {
+                await BookModel.increaseQuantity(child.book, child.quantity);
+            }
+        } else return false;
 
         order.pending = false;
         await order.save();

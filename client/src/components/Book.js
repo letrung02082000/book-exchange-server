@@ -1,5 +1,8 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
+
+import './Book.css';
+
 function Book(props) {
     const data = props.data;
     console.log(data);
@@ -20,7 +23,11 @@ function Book(props) {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td>
-                                    <img src={child.book.imgurl} alt='img' />
+                                    <img
+                                        src={child.book.imageurl}
+                                        alt='img'
+                                        className='book-img'
+                                    />
                                 </td>
                                 <td>{child.book.name}</td>
                                 <td>{child.quantity}</td>

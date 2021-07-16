@@ -42,7 +42,6 @@ function App() {
                                 <Nav.Link as={Link} to='/order'>
                                     Đơn đặt sách
                                 </Nav.Link>
-                                <Nav.Link href='#link'>Thể loại</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
