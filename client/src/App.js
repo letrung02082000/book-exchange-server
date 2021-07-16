@@ -29,42 +29,44 @@ function App() {
     };
     return (
         <div className='App'>
-            {show ? (
-                <Login handleLogin={handleLogin} />
-            ) : (
-                <Router>
-                    <Navbar bg='light' expand='lg'>
-                        <Container>
-                            <Navbar.Brand as={Link} to='/'>
-                                <img
-                                    alt='logo'
-                                    src='/logo.png'
-                                    className='logo'
-                                />
-                            </Navbar.Brand>
-                            <Navbar.Toggle aria-controls='basic-navbar-nav' />
-                            <Navbar.Collapse id='basic-navbar-nav'>
-                                <Nav className='me-auto'>
-                                    <Nav.Link as={Link} to='/'>
-                                        Quản lý sách
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to='/order'>
-                                        Đơn đặt sách
-                                    </Nav.Link>
-                                </Nav>
-                            </Navbar.Collapse>
-                        </Container>
-                    </Navbar>
-                    <Switch>
-                        <Route path='/order'>
-                            <OrderManagement />
-                        </Route>
-                        <Route path='/'>
-                            <BookManager />
-                        </Route>
-                    </Switch>
-                </Router>
-            )}
+            <Router>
+                {show ? (
+                    <Login handleLogin={handleLogin} />
+                ) : (
+                    <>
+                        <Navbar bg='light' expand='lg'>
+                            <Container>
+                                <Navbar.Brand as={Link} to='/'>
+                                    <img
+                                        alt='logo'
+                                        src='/logo.png'
+                                        className='logo'
+                                    />
+                                </Navbar.Brand>
+                                <Navbar.Toggle aria-controls='basic-navbar-nav' />
+                                <Navbar.Collapse id='basic-navbar-nav'>
+                                    <Nav className='me-auto'>
+                                        <Nav.Link as={Link} to='/'>
+                                            Quản lý sách
+                                        </Nav.Link>
+                                        <Nav.Link as={Link} to='/order'>
+                                            Đơn đặt sách
+                                        </Nav.Link>
+                                    </Nav>
+                                </Navbar.Collapse>
+                            </Container>
+                        </Navbar>
+                        <Switch>
+                            <Route path='/order'>
+                                <OrderManagement />
+                            </Route>
+                            <Route path='/'>
+                                <BookManager />
+                            </Route>
+                        </Switch>
+                    </>
+                )}
+            </Router>
         </div>
     );
 }

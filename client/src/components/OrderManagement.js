@@ -10,14 +10,21 @@ function OrderManagement() {
     const [data, setData] = useState([]);
     const [show, setShow] = useState(false);
     const [order, setOrder] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         axios
             .get('/api/order', { params: { page: page, limit: 10 } })
             .then((res) => res.data)
             .then((res) => {
                 if (res.type == 'Valid') {
+                    console.log(res.data);
                     setData(res.data);
+                    setLoading(false);
+                } else {
+                    setData([]);
+                    setLoading(false);
                 }
             });
     }, [page]);
@@ -122,12 +129,16 @@ function OrderManagement() {
                     )}
                 </tbody>
             </Table>
+
             <OrderDetail
                 order={order}
                 show={show}
                 handleClose={handleClose}
                 refreshPage={refreshPage}
             />
+
+            {loading ? <p>Đang tải dữ liệu...</p> : null}
+
             <div className='paging'>
                 <Button onClick={() => setPage(1)}>Về đầu trang</Button>
                 <Button onClick={goToPreviousPage}>Trước đó</Button>
